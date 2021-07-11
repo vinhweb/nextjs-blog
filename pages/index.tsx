@@ -3,7 +3,7 @@ import Layout, { siteTitle } from '../components/layout'
 import { SearchIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
 
-export default function Home() {
+export default function Home(props) {
   const [searchTerm, setSearchTerm] = useState('');
 
   function searchArea(event){
@@ -46,4 +46,3 @@ export default function Home() {
     </Layout>
   )
 }
-

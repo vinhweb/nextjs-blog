@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@heroicons/react": "^1.0.1",
+    "airtable": "^0.11.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.19.0",
     "gray-matter": "^4.0.2",
+    "lodash": "^4.17.21",
     "next": "^10.0.0",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",
