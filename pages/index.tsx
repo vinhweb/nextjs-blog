@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import base from './../components/Airtable';
 
-export default function Home(props) {
+export default function Home(props: {regionList, areaList, wardList}) {
+
   const [searchTerm, setSearchTerm] = useState({
     region: '',
-    area: '',
-    ward: ''
+    area:   '',
+    ward:   ''
   });
 
-  const [regionList, setRegionList] = useState([]);
-  const [areaList, setAreaList] = useState([]);
-  const [wardList, setWardList] = useState([]);
+  const [regionList, setRegionList] = useState(props.regionList);
+  const [areaList, setAreaList] = useState(props.areaList);
+  const [wardList, setWardList] = useState(props.wardList);
 
   const handleChange = (event) => {
     setSearchTerm({ 
@@ -28,7 +29,6 @@ export default function Home(props) {
       getWards(event.target.value)
     }
   }
-
 
   const getRegions = async () => {
     let records: any = await base('region')
@@ -66,7 +66,7 @@ export default function Home(props) {
   }
 
   const getWards = async (areaId) => {
-    const records: any = await base('ward')
+    let records: any = await base('ward')
       .select({
         filterByFormula: `{area_id} = "${areaId}"`,
         sort: [{field: "ward_id", direction: "asc"}]
@@ -75,18 +75,28 @@ export default function Home(props) {
       .catch(err => console.log(err));
 
     if(!_.isEmpty(records)){
-      setWardList(records.map(item => item.fields))
+      records = records.map(item => item.fields);
+      setWardList(records)
     }
   }
 
   function searchArea(event){
     event.preventDefault();
-    window.location.href="/phan-tich-khu-vuc/"+searchTerm
+    window.location.href="/phan-tich-khu-vuc/"+searchTerm.ward
   }
 
   useEffect(() => {
-    getRegions()
+    // getRegions()
   }, [])
+
+  useEffect(()=>{
+    if(!_.isEmpty(wardList)){
+      setSearchTerm({
+        ...searchTerm,
+        ward: wardList[0].ward_id
+      })
+    } 
+  }, [wardList, setWardList])
 
   return (
     <Layout home>
@@ -104,21 +114,22 @@ export default function Home(props) {
             <div>
             <form onSubmit={searchArea}>
               <div className="flex space-x-4">
-                <select name="region" value={searchTerm.region} onChange={handleChange}>
+                <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="region" value={searchTerm.region} onChange={handleChange}>
                   {regionList.map(region => (
                     <option key={region.region_id} value={region.region_id}>{region.region_name}</option>
                   ))}
                 </select>
-                <select name="area" value={searchTerm.area} onChange={handleChange}>
+                <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="area" value={searchTerm.area} onChange={handleChange}>
                   {areaList.map(area => (
                     <option key={area.area_id} value={area.area_id}>{area.area_name}</option>
                   ))}
                 </select>
-                <select name="ward" value={searchTerm.ward} onChange={handleChange}>
+                <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="ward" value={searchTerm.ward} onChange={handleChange}>
                   {wardList.map(ward => (
                     <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>
                   ))}
                 </select>
+                <button type="submit" className="whitespace-nowrap cursor-pointer block px-6 py-4 text-sm font-medium leading-normal bg-orange-400 hover:bg-orange-300 text-white rounded transition duration-200" >Tìm kiếm</button>
               </div>
             </form>
 
@@ -143,4 +154,59 @@ export default function Home(props) {
       </div>
     </Layout>
   )
+}
+
+
+export async function getStaticProps(context) {
+  let regionList: any,
+      areaList: any,
+      wardList: any;
+  
+  // Region List
+  regionList = await base('region')
+    .select({
+      sort: [{field: "region_id", direction: "asc"}]
+    })
+    .all()
+    .catch(err => console.log(err));
+  if(!_.isEmpty(regionList)){
+    regionList = regionList.map(item => item.fields);
+  }
+  // End Region List
+
+
+  // Area List
+  areaList = await base('area')
+    .select({
+      filterByFormula: `{region_id} = "${regionList[0].region_id}"`,
+      sort: [{field: "area_id", direction: "asc"}]
+    })
+    .all()
+    .catch(err => console.log(err));
+  if(!_.isEmpty(areaList)){
+    areaList = areaList.map(item => item.fields);
+  }
+  // End Area List
+
+  
+  // Ward List
+  wardList = await base('ward')
+    .select({
+      filterByFormula: `{area_id} = "${areaList[0].area_id}"`,
+      sort: [{field: "ward_id", direction: "asc"}]
+    })
+    .all()
+    .catch(err => console.log(err));
+  if(!_.isEmpty(wardList)){
+    wardList = wardList.map(item => item.fields);
+  }
+  // End Ward List
+
+  return {
+    props: {
+      regionList,
+      areaList,
+      wardList
+    },
+  }
 }
