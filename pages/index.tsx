@@ -1,15 +1,93 @@
-import Head from 'next/head'
-import Layout, { siteTitle } from '../components/layout'
-import { SearchIcon } from '@heroicons/react/solid'
-import { useState } from 'react'
+import Head from 'next/head';
+import Layout, { siteTitle } from '../components/layout';
+import { useEffect, useState } from 'react';
+import _ from 'lodash';
+import base from './../components/Airtable';
 
 export default function Home(props) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState({
+    region: '',
+    area: '',
+    ward: ''
+  });
+
+  const [regionList, setRegionList] = useState([]);
+  const [areaList, setAreaList] = useState([]);
+  const [wardList, setWardList] = useState([]);
+
+  const handleChange = (event) => {
+    setSearchTerm({ 
+      ...searchTerm, 
+      [event.target.name]: event.target.value 
+    });
+
+    if(event.target.name === 'region'){
+      getAreas(event.target.value)
+    }
+    if(event.target.name === 'area'){
+      getWards(event.target.value)
+    }
+  }
+
+
+  const getRegions = async () => {
+    let records: any = await base('region')
+      .select({
+        sort: [{field: "region_id", direction: "asc"}]
+      })
+      .all()
+      .catch(err => console.log(err));
+
+    if(!_.isEmpty(records)){
+      records = records.map(item => item.fields);
+      setRegionList(records)
+
+      // init get firstItem
+      getAreas(records[0].region_id)
+    }
+  }
+
+  const getAreas = async (regionId) => {
+    let records: any = await base('area')
+      .select({
+        filterByFormula: `{region_id} = "${regionId}"`,
+        sort: [{field: "area_id", direction: "asc"}]
+      })
+      .all()
+      .catch(err => console.log(err));
+
+    if(!_.isEmpty(records)){
+      records = records.map(item => item.fields);
+      setAreaList(records)
+      
+      // init get firstItem
+      getWards(records[0].area_id)
+    }
+  }
+
+  const getWards = async (areaId) => {
+    const records: any = await base('ward')
+      .select({
+        filterByFormula: `{area_id} = "${areaId}"`,
+        sort: [{field: "ward_id", direction: "asc"}]
+      })
+      .all()
+      .catch(err => console.log(err));
+
+    if(!_.isEmpty(records)){
+      setWardList(records.map(item => item.fields))
+    }
+  }
 
   function searchArea(event){
     event.preventDefault();
     window.location.href="/phan-tich-khu-vuc/"+searchTerm
   }
+
+  useEffect(() => {
+    getRegions()
+  }, [])
+
   return (
     <Layout home>
       <Head>
@@ -18,13 +96,33 @@ export default function Home(props) {
 
       <div className="container px-4 mx-auto py-12">
         <div className="flex flex-wrap items-center -mx-4">
-          <div className="w-full md:w-1/2 px-4 mb-6 md:mb-0">
-            <h2 className="mt-8 mb-6 lg:mb-12 text-4xl lg:text-5xl font-semibold">Xem giá <br /> Bất động sản</h2>
-            <div className="max-w-lg mb-6 lg:mb-12">
-              <p className="text-xl text-gray-500">Xem giá bất động sản với hệ thống dữ liệu bản đồ linh hoạt, chính xác và đầy đủ nhất Việt Nam bằng ứng dụng công nghệ 4.0</p>
+          <div className="w-full md:w-2/3 px-4 mb-6 md:mb-0">
+            <h2 className="mt-8 mb-6 lg:mb-12 text-4xl lg:text-5xl font-semibold">Định giá nhanh <br /> Bất động sản toàn quốc</h2>
+            <div className="max-w-2xl mb-6 lg:mb-12">
+              <p className="text-xl text-gray-500">Kiểm tra giá nhà đất trên khắp Việt Nam với công nghệ Bigdata và đội ngũ Thẩm Định Viên được cấp phép bởi Bộ Tài Chính</p>
             </div>
             <div>
-              <form className="" onSubmit={searchArea}>
+            <form onSubmit={searchArea}>
+              <div className="flex space-x-4">
+                <select name="region" value={searchTerm.region} onChange={handleChange}>
+                  {regionList.map(region => (
+                    <option key={region.region_id} value={region.region_id}>{region.region_name}</option>
+                  ))}
+                </select>
+                <select name="area" value={searchTerm.area} onChange={handleChange}>
+                  {areaList.map(area => (
+                    <option key={area.area_id} value={area.area_id}>{area.area_name}</option>
+                  ))}
+                </select>
+                <select name="ward" value={searchTerm.ward} onChange={handleChange}>
+                  {wardList.map(ward => (
+                    <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>
+                  ))}
+                </select>
+              </div>
+            </form>
+
+              {/* <form className="" onSubmit={searchArea}>
                 <div className="p-4 bg-white flex items-center rounded  shadow-lg">
                   <input className="rounded-l-full w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none" 
                         required
@@ -33,7 +131,7 @@ export default function Home(props) {
                         id="search" type="text" placeholder="Nhập nơi bạn muốn xem giá..."/>
                   <button type="submit" className="whitespace-nowrap cursor-pointer block px-6 py-4 text-sm font-medium leading-normal bg-orange-400 hover:bg-orange-300 text-white rounded transition duration-200" >Tìm kiếm</button>
                 </div>
-              </form>
+              </form> */}
             </div>
           </div>
           <div className="relative w-full md:w-1/2 px-4">

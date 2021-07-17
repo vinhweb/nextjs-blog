@@ -19,6 +19,19 @@ export default function DetailPage({fields}) {
     )
   }
 
+  const getRegions = async () => {
+    const records = await base('region')
+      .select({})
+      .firstPage()
+      .catch(err => console.log(err));
+
+    console.log(records);
+  }
+
+  useEffect(() => {
+    getRegions()
+  }, [])
+
   return (
     <Layout home>
       <Head>
