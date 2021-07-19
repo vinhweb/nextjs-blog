@@ -145,11 +145,6 @@ export default function Home(props: {regionList, areaList, wardList}) {
               </form> */}
             </div>
           </div>
-          <div className="relative w-full md:w-1/2 px-4">
-            <img className="hidden lg:block lg:absolute top-0 right-0 z-10 lg:mt-28" src="zeus-assets/icons/dots/yellow-dot-right-shield.svg" alt=""/>
-            <img className="relative" src="zeus-assets/images/z-picture.png" alt=""/>
-            <img className="hidden lg:block lg:absolute bottom-0 lg:left-0 lg:ml-6 lg:mb-20" src="zeus-assets/icons/dots/blue-dot-left-bars.svg" alt=""/>
-          </div>
         </div>
       </div>
     </Layout>
