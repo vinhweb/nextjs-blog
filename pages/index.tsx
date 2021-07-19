@@ -120,65 +120,67 @@ export default function Home(props: {regionList, areaList, wardList}) {
   }, [wardList, setWardList])
 
   return (
-    <Layout home>
-      <Head>
-        <title>{siteTitle}</title>
-      </Head>
+    <>
+      <Layout home>
+        <Head>
+          <title>{siteTitle}</title>
+        </Head>
 
-      <div className="container px-4 mx-auto py-12">
-        <div className="flex flex-wrap items-center -mx-4">
-          <div className="w-full md:w-2/3 px-4 mb-6 md:mb-0">
-            <h2 className="mt-8 mb-6 lg:mb-12 text-4xl lg:text-5xl font-semibold">Định giá nhanh <br /> Bất động sản toàn quốc</h2>
-            <div className="max-w-2xl mb-6 lg:mb-12">
-              <p className="text-xl text-gray-500">Kiểm tra giá nhà đất trên khắp Việt Nam với công nghệ Bigdata và đội ngũ Thẩm Định Viên được cấp phép bởi Bộ Tài Chính</p>
-            </div>
-            <div>
-            <form onSubmit={searchArea}>
-              <div className="flex space-x-4">
-                <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="region" value={searchTerm.region} onChange={handleChange}>
-                  <option>--- Chọn Tỉnh ---</option>
-                  {regionList.map(region => (
-                    <option key={region.region_id} value={region.region_id}>{region.region_name}</option>
-                  ))}
-                </select>
-
-                {searchTerm.region !=0 && (
-                  <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="area" value={searchTerm.area} onChange={handleChange}>
-                    <option value="0">--- Chọn Huyện ---</option>
-                    {areaList.map(area => (
-                      <option key={area.area_id} value={area.area_id}>{area.area_name}</option>
-                    ))}
-                  </select>
-                )}
-
-                {searchTerm.area != 0 &&  (
-                  <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="ward" value={searchTerm.ward} onChange={handleChange}>
-                    <option value="0">--- Chọn Xã ---</option>
-                    {wardList.map(ward => (
-                      <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>
-                    ))}
-                  </select>
-                )}
-
-                <button type="submit" className="whitespace-nowrap cursor-pointer block px-6 py-4 text-sm font-medium leading-normal bg-orange-400 hover:bg-orange-300 text-white rounded transition duration-200" >Tìm kiếm</button>
+        <div className="container px-4 mx-auto py-12">
+          <div className="flex flex-wrap items-center -mx-4">
+            <div className="w-full md:w-2/3 px-4 mb-6 md:mb-0">
+              <h2 className="mt-8 mb-6 lg:mb-12 text-4xl lg:text-5xl font-semibold">Định giá nhanh <br /> Bất động sản toàn quốc</h2>
+              <div className="max-w-2xl mb-6 lg:mb-12">
+                <p className="text-xl text-gray-500">Kiểm tra giá nhà đất trên khắp Việt Nam với công nghệ Bigdata và đội ngũ Thẩm Định Viên được cấp phép bởi Bộ Tài Chính</p>
               </div>
-            </form>
+              <div>
+              <form onSubmit={searchArea}>
+                <div className="flex space-x-4">
+                  <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="region" value={searchTerm.region} onChange={handleChange}>
+                    <option>--- Chọn Tỉnh ---</option>
+                    {regionList.map(region => (
+                      <option key={region.region_id} value={region.region_id}>{region.region_name}</option>
+                    ))}
+                  </select>
 
-              {/* <form className="" onSubmit={searchArea}>
-                <div className="p-4 bg-white flex items-center rounded  shadow-lg">
-                  <input className="rounded-l-full w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none" 
-                        required
-                        value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
-                        id="search" type="text" placeholder="Nhập nơi bạn muốn xem giá..."/>
+                  {searchTerm.region !=0 && (
+                    <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="area" value={searchTerm.area} onChange={handleChange}>
+                      <option value="0">--- Chọn Huyện ---</option>
+                      {areaList.map(area => (
+                        <option key={area.area_id} value={area.area_id}>{area.area_name}</option>
+                      ))}
+                    </select>
+                  )}
+
+                  {searchTerm.area != 0 &&  (
+                    <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="ward" value={searchTerm.ward} onChange={handleChange}>
+                      <option value="0">--- Chọn Xã ---</option>
+                      {wardList.map(ward => (
+                        <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>
+                      ))}
+                    </select>
+                  )}
+
                   <button type="submit" className="whitespace-nowrap cursor-pointer block px-6 py-4 text-sm font-medium leading-normal bg-orange-400 hover:bg-orange-300 text-white rounded transition duration-200" >Tìm kiếm</button>
                 </div>
-              </form> */}
+              </form>
+
+                {/* <form className="" onSubmit={searchArea}>
+                  <div className="p-4 bg-white flex items-center rounded  shadow-lg">
+                    <input className="rounded-l-full w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none" 
+                          required
+                          value={searchTerm}
+                          onChange={(event) => setSearchTerm(event.target.value)}
+                          id="search" type="text" placeholder="Nhập nơi bạn muốn xem giá..."/>
+                    <button type="submit" className="whitespace-nowrap cursor-pointer block px-6 py-4 text-sm font-medium leading-normal bg-orange-400 hover:bg-orange-300 text-white rounded transition duration-200" >Tìm kiếm</button>
+                  </div>
+                </form> */}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </>
   )
 }
 
