@@ -5,7 +5,6 @@ import _ from 'lodash';
 import base from './../components/Airtable';
 
 export default function Home(props: {regionList, areaList, wardList}) {
-
   const [searchTerm, setSearchTerm] = useState({
     region: 0,
     area:   0,
@@ -201,11 +200,10 @@ export async function getStaticProps(context) {
   }
   // End Region List
 
-
   // Area List
   areaList = await base('area')
     .select({
-      filterByFormula: `{region_id} = "${regionList[0].region_id}"`,
+      filterByFormula: `{region_id} = "${regionList.region_id}"`,
       sort: [{field: "area_id", direction: "asc"}]
     })
     .all()
@@ -219,7 +217,7 @@ export async function getStaticProps(context) {
   // Ward List
   wardList = await base('ward')
     .select({
-      filterByFormula: `{area_id} = "${areaList[0].area_id}"`,
+      filterByFormula: `{area_id} = "${areaList.area_id}"`,
       sort: [{field: "ward_id", direction: "asc"}]
     })
     .all()

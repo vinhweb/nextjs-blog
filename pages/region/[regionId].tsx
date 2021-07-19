@@ -9,6 +9,7 @@ import Link from 'next/dist/client/link';
 import numberWithCommas from '../../utils/numberWithCommas'
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { Bar } from 'react-chartjs-2';
+import { AnyNaptrRecord } from 'node:dns';
 
 const containerStyle = {
   width: '100%',
@@ -24,12 +25,8 @@ export default function DetailPage({areaList}) {
 
   let areaListUnique = _.uniqBy(areaList, 'area_id')
 
-  const {region_name, area_name, ward_name, region_geo, region_id, area_geo, area_id,
-        dat, dat_arr, dat_mat_duong, dat_mat_duong_arr, dat_ngo_hem, dat_ngo_hem_arr,
-        nha_o, nha_o_arr, nha_o_mat_duong, nha_o_mat_duong_arr, nha_o_ngo_hem, nha_o_ngo_hem_arr,
-        can_ho,
-        van_phong} = areaList[0];
-  
+  const {region_name, area_name, area_geo, region_id, area_id} = areaList[0];
+  console.log(region_name)
   const center = {
     lat: JSON.parse("[" + area_geo + "]")[0],
     lng: JSON.parse("[" + area_geo + "]")[1]
@@ -39,7 +36,7 @@ export default function DetailPage({areaList}) {
   return (
     <Layout home>
       <Head>
-        <title>{area_name.trim()}, {region_name.trim()} - {siteTitle}</title>
+        <title>{area_name.trim()}, {region_name} - {siteTitle}</title>
       </Head>
 
       <div className="container px-4 mx-auto py-12">
@@ -54,10 +51,10 @@ export default function DetailPage({areaList}) {
             <a className="text-teal-400">{region_name}</a>
           </li>
         </Breadcrumb>
-        <h1 className="mt-6 text-3xl mb-4 font-semibold">Giá bất động sản {region_name.trim()}</h1>
+        <h1 className="mt-6 text-3xl mb-4 font-semibold">Giá bất động sản {region_name}</h1>
         <div className="flex space-x-5">
           <div className="w-1/2">
-            <p className="text-sm">Tỉnh {region_name.trim()} bao gồm: </p>
+            <p className="text-sm">Tỉnh {region_name} bao gồm: </p>
             <ul className="list-disc list-inside my-2 grid grid-cols-2">
               {areaListUnique.map(item => (
                 <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={item.id}>
@@ -93,18 +90,18 @@ export const getServerSideProps = async (context) => {
   const regionId = params.regionId;
   let areaList: any;
   
-  // Ward List
-  areaList = await base('main_data')
+
+  // Area List
+  areaList = await base('area')
     .select({
       filterByFormula: `{region_id} = "${regionId}"`,
-      sort: [{field: "ward_id", direction: "asc"}]
+      sort: [{field: "area_id", direction: "asc"}]
     })
     .all()
     .catch(err => console.log(err));
   if(!_.isEmpty(areaList)){
     areaList = areaList.map(item => item.fields);
   }
-  // End Ward List
 
   return{
     props: {
