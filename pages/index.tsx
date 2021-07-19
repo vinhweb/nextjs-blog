@@ -7,9 +7,9 @@ import base from './../components/Airtable';
 export default function Home(props: {regionList, areaList, wardList}) {
 
   const [searchTerm, setSearchTerm] = useState({
-    region: '',
-    area:   '',
-    ward:   ''
+    region: 0,
+    area:   0,
+    ward:   0
   });
 
   const [regionList, setRegionList] = useState(props.regionList);
@@ -23,10 +23,21 @@ export default function Home(props: {regionList, areaList, wardList}) {
     });
 
     if(event.target.name === 'region'){
-      getAreas(event.target.value)
+      getAreas(event.target.value);
+      setSearchTerm({
+        ...searchTerm, 
+        [event.target.name]: event.target.value ,
+        area: 0,
+        ward: 0
+      })
     }
     if(event.target.name === 'area'){
-      getWards(event.target.value)
+      getWards(event.target.value);
+      setSearchTerm({
+        ...searchTerm, 
+        [event.target.name]: event.target.value ,
+        ward: 0
+      })
     }
   }
 
@@ -43,7 +54,7 @@ export default function Home(props: {regionList, areaList, wardList}) {
       setRegionList(records)
 
       // init get firstItem
-      getAreas(records[0].region_id)
+      // getAreas(records[0].region_id)
     }
   }
 
@@ -61,7 +72,7 @@ export default function Home(props: {regionList, areaList, wardList}) {
       setAreaList(records)
       
       // init get firstItem
-      getWards(records[0].area_id)
+      // getWards(records[0].area_id)
     }
   }
 
@@ -82,7 +93,18 @@ export default function Home(props: {regionList, areaList, wardList}) {
 
   function searchArea(event){
     event.preventDefault();
+    console.log(searchTerm)
+    
+    if(searchTerm.ward === 0){
+      if(searchTerm.area === 0){
+        window.location.href="/region/"+searchTerm.region
+        return;
+      }
+      window.location.href="/area/"+searchTerm.area
+      return;
+    }
     window.location.href="/phan-tich-khu-vuc/"+searchTerm.ward
+    return;
   }
 
   useEffect(() => {
@@ -90,12 +112,12 @@ export default function Home(props: {regionList, areaList, wardList}) {
   }, [])
 
   useEffect(()=>{
-    if(!_.isEmpty(wardList)){
-      setSearchTerm({
-        ...searchTerm,
-        ward: wardList[0].ward_id
-      })
-    } 
+    // if(!_.isEmpty(wardList)){
+    //   setSearchTerm({
+    //     ...searchTerm,
+    //     ward: wardList[0].ward_id
+    //   })
+    // } 
   }, [wardList, setWardList])
 
   return (
@@ -115,20 +137,30 @@ export default function Home(props: {regionList, areaList, wardList}) {
             <form onSubmit={searchArea}>
               <div className="flex space-x-4">
                 <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="region" value={searchTerm.region} onChange={handleChange}>
+                  <option>--- Chọn Tỉnh ---</option>
                   {regionList.map(region => (
                     <option key={region.region_id} value={region.region_id}>{region.region_name}</option>
                   ))}
                 </select>
-                <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="area" value={searchTerm.area} onChange={handleChange}>
-                  {areaList.map(area => (
-                    <option key={area.area_id} value={area.area_id}>{area.area_name}</option>
-                  ))}
-                </select>
-                <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="ward" value={searchTerm.ward} onChange={handleChange}>
-                  {wardList.map(ward => (
-                    <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>
-                  ))}
-                </select>
+
+                {searchTerm.region !=0 && (
+                  <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="area" value={searchTerm.area} onChange={handleChange}>
+                    <option value="0">--- Chọn Huyện ---</option>
+                    {areaList.map(area => (
+                      <option key={area.area_id} value={area.area_id}>{area.area_name}</option>
+                    ))}
+                  </select>
+                )}
+
+                {searchTerm.area != 0 &&  (
+                  <select className="px-6 py-4 text-sm font-medium leading-normal rounded appearance-none bg-gray-50" name="ward" value={searchTerm.ward} onChange={handleChange}>
+                    <option value="0">--- Chọn Xã ---</option>
+                    {wardList.map(ward => (
+                      <option key={ward.ward_id} value={ward.ward_id}>{ward.ward_name}</option>
+                    ))}
+                  </select>
+                )}
+
                 <button type="submit" className="whitespace-nowrap cursor-pointer block px-6 py-4 text-sm font-medium leading-normal bg-orange-400 hover:bg-orange-300 text-white rounded transition duration-200" >Tìm kiếm</button>
               </div>
             </form>
