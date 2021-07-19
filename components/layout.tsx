@@ -10,7 +10,7 @@ const name = 'ThamDinhGiaAV'
 export const siteTitle = 'Thẩm định giá Bất động sản'
 
 export default function Layout({ children }) {
-  const [popup, setpopup] = useState(true)
+  const [popup, setpopup] = useState(false)
   const [selectedFile, setselectedFile] = useState(null)
 
   const onFileChange = (event) => {
@@ -63,9 +63,7 @@ export default function Layout({ children }) {
             <li className="text-sm font-medium"><Link href="#">Xem giá</Link></li>
           </ul>
           <div className="hidden lg:block">
-            <Link href="#">
-              <a onClick={()=>setpopup(!popup)} className="inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>
-            </Link>
+            <a onClick={()=>setpopup(!popup)} className="inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>
           </div>
         </nav>
       </header>
