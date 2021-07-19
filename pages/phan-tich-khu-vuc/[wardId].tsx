@@ -172,7 +172,7 @@ export default function DetailPage({ward, wardList}) {
             <li>Đa số giá đất được khảo sát dựa vào giá đất thổ cư/ có giao dịch trên thị trường.</li>
             <li>“Giá Nhà” có độ ưu tiên sau “Giá Đất” và nên được sử dụng khi thiêủ thông tin. </li>
             <li>Con số đã được ThamdinhgiaAV xác minh sẽ được kèm dấu “*”</li>
-            <li>Độ tin cậy giảm dần theo màu số Màu đen > Màu Cam > Màu đỏ</li>
+            <li>Độ tin cậy giảm dần theo màu số Màu đen &gt; Màu Cam &gt; Màu đỏ</li>
           </ul>
         </div>
 
