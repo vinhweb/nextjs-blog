@@ -1,48 +1,21 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
-import Popup from './Popup'
-import base from './Airtable';
-import axios from "axios";
+import { useEffect, useState } from 'react'
+import GuestAddPost from './Popup/GuestAddPost'
+import ReactNotification from 'react-notifications-component'
 
 const name = 'ThamDinhGiaAV'
 export const siteTitle = 'Thẩm định giá Bất động sản'
 
 export default function Layout({ children }) {
-  const [popup, setpopup] = useState(false)
-  const [selectedFile, setselectedFile] = useState(null)
 
-  const onFileChange = (event) => {
-    setselectedFile(event.target.files[0]);
-  };
-  
-  const onSubmit = (e)=>{
-    e.preventDefault();
-
-    base('guest').create([
-      {
-        "fields": {
-          Name: `${e.target.username.value}`,
-          Notes: `${URL.createObjectURL(selectedFile)}`,
-          // Attachments: [{
-          //   url: `${URL.createObjectURL(selectedFile)}`
-          // }]
-        }
-      },
-    ], function(err, records) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      records.forEach(function (record) {
-        console.log(record.getId());
-      });
-    });
-  }
+  const [popup, setPopup] = useState(true)
 
   return (
     <div>
+      <ReactNotification />
+      
       <header>
         <nav className="flex justify-between items-center py-8 px-4 xl:px-10">
           <Link href="/">
@@ -63,10 +36,11 @@ export default function Layout({ children }) {
             <li className="text-sm font-medium"><Link href="#">Xem giá</Link></li>
           </ul>
           <div className="hidden lg:block">
-            <a onClick={()=>setpopup(!popup)} className="inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>
+            <a onClick={()=>setPopup(!popup)} className="inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>
           </div>
         </nav>
       </header>
+
       <main>{children}</main>
 
       <footer className="py-10 lg:py-20">
@@ -110,76 +84,7 @@ export default function Layout({ children }) {
       </footer>
 
       {popup && (
-        <Popup size={"max-w-3xl"}>
-          <form onSubmit={onSubmit} className="align-bottom rounded-lg text-left overflow-hidden transform transition-all shadow-xl" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-            <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <h3 className="mb-5 text-2xl font-semibold">Đăng tin</h3>
-              <div className="grid grid-cols-4 gap-4 gap-y-5">
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Pháp lý
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Loại BĐS
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Diện tích đất/ sử dụng riêng
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Tổng Diện tích sử dụng
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Giá bán
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    SĐT
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Chi tiết BĐS
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-                <div className="col-span-2">
-                  <label className="block text-gray-700 text-sm mb-2" htmlFor="username">
-                    Email
-                  </label>
-                  <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="username" id="username" type="text" placeholder="Username"/>
-                </div>
-
-                {/* <div className="mb-4">
-                  <input type="file" onChange={onFileChange} />
-                </div> */}
-              </div>
-            </div>
-
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 sm:ml-3 sm:w-auto sm:text-sm">
-                Đăng tin
-              </button>
-              <button onClick={()=>setpopup(!popup)} type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white  text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                Hủy
-              </button>
-            </div>
-          </form>
-        </Popup>
+        <GuestAddPost visible={popup} setVisible={setPopup} />
       )}
 
     </div>
