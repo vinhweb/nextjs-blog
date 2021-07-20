@@ -28,7 +28,7 @@ const ModalSuccess = {
 
 const GuestAddPost = ({visible = false, setVisible}) => {
 
-  const modalSuccess = useRef();
+  const modalSuccess = useRef(null);
   const [selectedPhapLy, setSelectedPhapLy] = useState(PhapLyList[0])
   const [selectedLoaiBDS, setSelectedLoaiBDS] = useState(LoaiBDSList[0])
 
