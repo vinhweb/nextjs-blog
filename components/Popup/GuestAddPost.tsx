@@ -6,7 +6,7 @@ import axios from "axios";
 import ListboxCustom from '../ListboxCustom'
 import StoreNotifications from '../Notifications/StoreNotifications';
 
-const GuestAddPost = ({visible, setVisible}) => {
+const GuestAddPost = ({visible = false, setVisible}) => {
   const PhapLyList = [
     { name: 'Sổ hồng' },
     { name: 'Sổ hồng chung' },
@@ -61,13 +61,14 @@ const GuestAddPost = ({visible, setVisible}) => {
 
     setTimeout(function(){ 
       setVisible(!visible)
-    }, 1000);
+    }, 500);
   }
-
 
   return (
     <div>
-      <Popup size={"max-w-3xl"}>
+      {visible && (
+
+      <Popup size={"max-w-3xl"} visible={visible} setVisible={setVisible}>
         <form onSubmit={onSubmit} className="align-bottom rounded-lg text-left overflow-hidden transform transition-all shadow-xl" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
           <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <h3 className="mb-5 text-2xl font-semibold">Đăng tin</h3>
@@ -139,6 +140,8 @@ const GuestAddPost = ({visible, setVisible}) => {
           </div>
         </form>
       </Popup>
+    
+      )}
     </div>
   )
 }

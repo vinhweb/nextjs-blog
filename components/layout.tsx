@@ -9,7 +9,6 @@ const name = 'ThamDinhGiaAV'
 export const siteTitle = 'Thẩm định giá Bất động sản'
 
 export default function Layout({ children }) {
-
   const [popup, setPopup] = useState(true)
 
   return (
@@ -36,7 +35,7 @@ export default function Layout({ children }) {
             <li className="text-sm font-medium"><Link href="#">Xem giá</Link></li>
           </ul>
           <div className="hidden lg:block">
-            <a onClick={()=>setPopup(!popup)} className="inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>
+            <a onClick={()=>setPopup(!popup)} className="cursor-pointer inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>
           </div>
         </nav>
       </header>
@@ -83,9 +82,7 @@ export default function Layout({ children }) {
         <p className="text-center text-sm text-gray-500 pt-8 px-4 border-t">All rights reserved © {name} 2021</p>
       </footer>
 
-      {popup && (
-        <GuestAddPost visible={popup} setVisible={setPopup} />
-      )}
+      <GuestAddPost visible={popup} setVisible={setPopup}  />
 
     </div>
   )
