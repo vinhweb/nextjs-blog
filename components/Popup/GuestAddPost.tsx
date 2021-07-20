@@ -132,7 +132,7 @@ const GuestAddPost = ({visible = false, setVisible}) => {
                 <label className="block text-gray-700 text-sm mb-2" htmlFor="chi_tiet">
                   Chi tiết BĐS
                 </label>
-                <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="chi_tiet" id="chi_tiet" rows="3" placeholder=""></textarea>
+                <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="chi_tiet" id="chi_tiet" rows={3} placeholder=""></textarea>
               </div>
 
 
