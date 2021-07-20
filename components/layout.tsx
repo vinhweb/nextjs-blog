@@ -9,7 +9,7 @@ const name = 'ThamDinhGiaAV'
 export const siteTitle = 'Thẩm định giá Bất động sản'
 
 export default function Layout({ children }) {
-  const [popup, setPopup] = useState(true)
+  const [popup, setPopup] = useState(false)
 
   return (
     <div>
@@ -83,7 +83,6 @@ export default function Layout({ children }) {
       </footer>
 
       <GuestAddPost visible={popup} setVisible={setPopup}  />
-
     </div>
   )
 }

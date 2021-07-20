@@ -1,30 +1,38 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState, useRef, Fragment } from 'react'
 import Popup from './Popup'
 import base from '../Airtable';
-import axios from "axios";
 import ListboxCustom from '../ListboxCustom'
 import StoreNotifications from '../Notifications/StoreNotifications';
+import Modal from './Modal';
+import { Dialog, Transition } from '@headlessui/react'
+
+const PhapLyList = [
+  { name: 'Sổ hồng' },
+  { name: 'Sổ hồng chung' },
+  { name: 'Giấy tay' },
+  { name: 'Đất quy hoạch' },
+]
+const LoaiBDSList = [
+  { name: 'Đất' },
+  { name: 'Nhà' },
+  { name: 'Văn phòng' },
+  { name: 'Căn hộ' },
+]
+const ModalSuccess = {
+  title: 'Thành công',
+  message: 'Cảm ơn anh/chị đã cung cấp thông tin BĐS. ThamDinhGiaAV sẽ xem xét và duyệt sớm nhất có thể',
+  buttonText: 'Oke!',
+  visible: false
+}
 
 const GuestAddPost = ({visible = false, setVisible}) => {
-  const PhapLyList = [
-    { name: 'Sổ hồng' },
-    { name: 'Sổ hồng chung' },
-    { name: 'Giấy tay' },
-    { name: 'Đất quy hoạch' },
-  ]
-  const [selectedPhapLy, setSelectedPhapLy] = useState(PhapLyList[0])
 
-  const LoaiBDSList = [
-    { name: 'Đất' },
-    { name: 'Nhà' },
-    { name: 'Văn phòng' },
-    { name: 'Căn hộ' },
-  ]
+  const modalSuccess = useRef();
+  const [selectedPhapLy, setSelectedPhapLy] = useState(PhapLyList[0])
   const [selectedLoaiBDS, setSelectedLoaiBDS] = useState(LoaiBDSList[0])
 
   const [selectedFile, setselectedFile] = useState(null)
-
   const onFileChange = (event) => {
     setselectedFile(event.target.files[0]);
   };
@@ -41,7 +49,7 @@ const GuestAddPost = ({visible = false, setVisible}) => {
       email: `${e.target.email.value}`,
       chi_tiet: `${e.target.chi_tiet.value}`,
     }
-
+    
     base('guest').create([
       {
         "fields": formData
@@ -57,21 +65,25 @@ const GuestAddPost = ({visible = false, setVisible}) => {
       });
     });
 
-    StoreNotifications({title: 'Thành công', message: 'Cảm ơn anh/chị đã cung cấp thông tin BĐS, ThamDinhGiaAV sẽ xem xét và duyệt sớm nhất có thể', type: 'success'})
-
-    setTimeout(function(){ 
-      setVisible(!visible)
+    // StoreNotifications({title: 'Thành công', message: '', type: 'success'})
+    setVisible(!visible)
+    setTimeout(() => {
+      modalSuccess.current.open();
     }, 500);
   }
 
   return (
     <div>
-      {visible && (
-
       <Popup size={"max-w-3xl"} visible={visible} setVisible={setVisible}>
-        <form onSubmit={onSubmit} className="align-bottom rounded-lg text-left overflow-hidden transform transition-all shadow-xl" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-          <div className="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <h3 className="mb-5 text-2xl font-semibold">Đăng tin</h3>
+        <Dialog.Title
+          as="h3"
+          className="text-lg font-medium leading-6 text-gray-900"
+          >
+          Đăng tin
+        </Dialog.Title>
+        <form onSubmit={onSubmit}>
+          {/* body */}
+          <div className="mt-2">
             <div className="grid grid-cols-4 gap-4 gap-y-5">
               <div className="col-span-2">
                 <label className="block text-gray-700 text-sm mb-2" htmlFor="phaply">
@@ -129,9 +141,13 @@ const GuestAddPost = ({visible = false, setVisible}) => {
               </div> */}
             </div>
           </div>
+          {/*end body */}
 
-          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 sm:ml-3 sm:w-auto sm:text-sm">
+          {/* footer */}
+          <div className="sm:flex sm:flex-row-reverse">
+            <button 
+              type="submit"
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 sm:ml-3 sm:w-auto sm:text-sm">
               Đăng tin
             </button>
             <button onClick={()=>setVisible(!visible)} type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white  text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
@@ -140,8 +156,8 @@ const GuestAddPost = ({visible = false, setVisible}) => {
           </div>
         </form>
       </Popup>
-    
-      )}
+
+      <Modal ref={modalSuccess} title={ModalSuccess.title} buttonText={ModalSuccess.buttonText} message={ModalSuccess.message} />
     </div>
   )
 }

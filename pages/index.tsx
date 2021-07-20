@@ -121,11 +121,10 @@ export default function Home(props: {regionList, areaList, wardList}) {
 
   return (
     <>
-      <Layout home>
+      <Layout>
         <Head>
           <title>{siteTitle}</title>
         </Head>
-
         <div className="container px-4 mx-auto py-12">
           <div className="flex flex-wrap items-center -mx-4">
             <div className="w-full md:w-2/3 px-4 mb-6 md:mb-0">
@@ -186,9 +185,9 @@ export default function Home(props: {regionList, areaList, wardList}) {
 
 
 export async function getStaticProps(context) {
-  let regionList: any,
-      areaList: any,
-      wardList: any;
+  let regionList: any = [],
+      areaList: any[] = [],
+      wardList: any[] = [];
   
   // Region List
   regionList = await base('region')
@@ -203,30 +202,30 @@ export async function getStaticProps(context) {
   // End Region List
 
   // Area List
-  areaList = await base('area')
-    .select({
-      filterByFormula: `{region_id} = "${regionList.region_id}"`,
-      sort: [{field: "area_id", direction: "asc"}]
-    })
-    .all()
-    .catch(err => console.log(err));
-  if(!_.isEmpty(areaList)){
-    areaList = areaList.map(item => item.fields);
-  }
+  // areaList = await base('area')
+  //   .select({
+  //     filterByFormula: `{region_id} = "${regionList.region_id}"`,
+  //     sort: [{field: "area_id", direction: "asc"}]
+  //   })
+  //   .all()
+  //   .catch(err => console.log(err));
+  // if(!_.isEmpty(areaList)){
+  //   areaList = areaList.map(item => item.fields);
+  // }
   // End Area List
 
   
   // Ward List
-  wardList = await base('ward')
-    .select({
-      filterByFormula: `{area_id} = "${areaList.area_id}"`,
-      sort: [{field: "ward_id", direction: "asc"}]
-    })
-    .all()
-    .catch(err => console.log(err));
-  if(!_.isEmpty(wardList)){
-    wardList = wardList.map(item => item.fields);
-  }
+  // wardList = await base('ward')
+  //   .select({
+  //     filterByFormula: `{area_id} = "${areaList.area_id}"`,
+  //     sort: [{field: "ward_id", direction: "asc"}]
+  //   })
+  //   .all()
+  //   .catch(err => console.log(err));
+  // if(!_.isEmpty(wardList)){
+  //   wardList = wardList.map(item => item.fields);
+  // }
   // End Ward List
 
   return {

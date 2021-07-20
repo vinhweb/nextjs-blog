@@ -12,7 +12,7 @@ const StoreNotifications = ({title, message, type}) => {
       animationOut: ["animate__animated", "animate__fadeOut"],
       dismiss: {
         duration: 3000,
-        onScreen: true
+        onScreen: true,
       }
     });
 }
