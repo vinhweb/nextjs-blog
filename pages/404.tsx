@@ -3,7 +3,7 @@ import Layout, { siteTitle } from '../components/layout'
 
 const NotFoundPage = () => {
   return (
-    <Layout home>
+    <Layout>
       <Head>
         <title>404 - {siteTitle}</title>
       </Head>

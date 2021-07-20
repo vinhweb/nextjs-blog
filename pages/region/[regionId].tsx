@@ -34,7 +34,7 @@ export default function DetailPage({areaList}) {
         
 
   return (
-    <Layout home>
+    <Layout>
       <Head>
         <title>{area_name.trim()}, {region_name} - {siteTitle}</title>
       </Head>

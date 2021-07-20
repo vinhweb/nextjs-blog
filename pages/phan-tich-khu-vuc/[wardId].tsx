@@ -35,7 +35,7 @@ export default function DetailPage({ward, wardList}) {
   };
 
   return (
-    <Layout home>
+    <Layout>
       <Head>
         <title>{ward_name.trim()}, {area_name.trim()}, {region_name} - {siteTitle}</title>
       </Head>
