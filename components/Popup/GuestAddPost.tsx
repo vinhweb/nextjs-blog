@@ -6,6 +6,7 @@ import ListboxCustom from '../ListboxCustom'
 import StoreNotifications from '../Notifications/StoreNotifications';
 import Modal from './Modal';
 import { Dialog, Transition } from '@headlessui/react'
+import LoadingScreen from '../LoadingScreen';
 
 const PhapLyList = [
   { name: 'Sổ hồng' },
@@ -26,46 +27,75 @@ const ModalSuccess = {
   visible: false
 }
 
-const GuestAddPost = ({visible = false, setVisible}) => {
+async function fetchImagesUpload(files){
+  const url = 'https://api.cloudinary.com/v1_1/drfo4wnfg/image/upload';
+  // const url = 'https://api.cloudinary.com/v1_1/demo/image/upload';
+  const images = []
 
+  for(let i=0; i<files.length; i++){
+    let file = files[i];
+    
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "il7aqfey");
+    // formDataImg.append("upload_preset", "docs_upload_example_us_preset");
+
+    let response = await fetch(url, {
+      method: "POST",
+      body: formData
+    })
+    let data = await response.json();
+    images.push({url: data.secure_url})      
+  }
+
+  return images;
+}
+
+const GuestAddPost = ({visible = false, setVisible}) => {
+  const [loadingForm, setLoadingForm] = useState(false);
   const modalSuccess = useRef(null);
   const [selectedPhapLy, setSelectedPhapLy] = useState(PhapLyList[0])
   const [selectedLoaiBDS, setSelectedLoaiBDS] = useState(LoaiBDSList[0])
 
-  const [selectedFile, setselectedFile] = useState(null)
+  const [selectedFiles, setselectedFile] = useState(null)
   const onFileChange = (event) => {
-    setselectedFile(event.target.files[0]);
+    const files = event.target.files
+    setselectedFile(files);
   };
-  
-  const onSubmit = (e)=>{
+
+  const onSubmit = async (e)=>{
     e.preventDefault();
+    setLoadingForm(true)
+
+    let imagesUpload = []
+    await fetchImagesUpload(selectedFiles).then(images => {
+      imagesUpload = images
+    })
+
+    /* Airtable upload */
     const formData = {
-      phone: `${e.target.phone.value}`,
-      phap_ly: `${selectedPhapLy.name}`,
-      loai_bds: `${selectedLoaiBDS.name}`,
-      dien_tich_dat: `${e.target.dien_tich_dat.value}`,
-      tong_dien_tich: `${e.target.tong_dien_tich.value}`,
-      gia_ban: `${e.target.gia_ban.value}`,
-      email: `${e.target.email.value}`,
-      chi_tiet: `${e.target.chi_tiet.value}`,
+      phone: e.target.phone.value,
+      phap_ly: selectedPhapLy.name,
+      loai_bds: selectedLoaiBDS.name,
+      dien_tich_dat: e.target.dien_tich_dat.value,
+      tong_dien_tich: e.target.tong_dien_tich.value,
+      gia_ban: e.target.gia_ban.value,
+      email: e.target.email.value,
+      chi_tiet: e.target.chi_tiet.value,
+      hinh_anh: imagesUpload
     }
-    
-    base('guest').create([
-      {
-        "fields": formData
-      },
-    ], function(err, records) {
+    base('guest').create(formData, function(err, record) {
       if (err) {
         StoreNotifications({title: 'Lỗi', message: 'Đã có lỗi xảy ra', type: 'danger'})
         console.error(err);
         return;
       }
-      records.forEach(function (record) {
-        console.log(record.getId());
-      });
+      console.log(record.getId());
     });
+    /* Airtable upload */
 
     // StoreNotifications({title: 'Thành công', message: '', type: 'success'})
+    setLoadingForm(false)
     setVisible(!visible)
     setTimeout(() => {
       modalSuccess.current.open();
@@ -75,6 +105,9 @@ const GuestAddPost = ({visible = false, setVisible}) => {
   return (
     <div>
       <Popup size={"max-w-3xl"} visible={visible} setVisible={setVisible}>
+        {loadingForm && (
+          <LoadingScreen />
+        )}
         <Dialog.Title
           as="h3"
           className="text-lg font-medium leading-6 text-gray-900"
@@ -136,15 +169,13 @@ const GuestAddPost = ({visible = false, setVisible}) => {
               </div>
 
 
-              {/* <div className="mb-4">
-                <input type="file" onChange={onFileChange} />
-              </div> */}
+              <input type="file"  name="files[]" multiple onChange={onFileChange} />
             </div>
           </div>
           {/*end body */}
 
           {/* footer */}
-          <div className="sm:flex sm:flex-row-reverse">
+          <div className="sm:flex sm:flex-row-reverse mt-4">
             <button 
               type="submit"
               className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 sm:ml-3 sm:w-auto sm:text-sm">
