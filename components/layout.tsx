@@ -33,6 +33,7 @@ export default function Layout({ children }) {
             <li className="text-sm font-medium"><Link href="/">Trang chủ</Link></li>
             <li className="text-sm font-medium"><Link href="#">Thẩm định giá</Link></li>
             <li className="text-sm font-medium"><Link href="#">Xem giá</Link></li>
+            <li className="text-sm font-medium"><Link href="/tin-bds">Tin BĐS</Link></li>
           </ul>
           <div className="hidden lg:block">
             <a onClick={()=>setPopup(!popup)} className="cursor-pointer inline-block py-3 px-8 text-sm leading-normal font-medium bg-red-50 hover:bg-red-100 text-red-500 rounded transition duration-200">Đăng tin</a>

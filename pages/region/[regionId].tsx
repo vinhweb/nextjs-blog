@@ -4,12 +4,13 @@ import { useRouter, withRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import base from '../../components/Airtable';
 import _ from 'lodash';
-import Breadcrumb from '../../components/Breadcrumb';
+import Breadcrumb from '../../components/Head/Breadcrumb';
 import Link from 'next/dist/client/link';
 import numberWithCommas from '../../utils/numberWithCommas'
 import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import { Bar } from 'react-chartjs-2';
 import { AnyNaptrRecord } from 'node:dns';
+import PageTitle from '../../components/Head/PageTitle';
 
 const containerStyle = {
   width: '100%',
@@ -32,7 +33,11 @@ export default function DetailPage({areaList}) {
     lng: JSON.parse("[" + area_geo + "]")[1]
   };
         
-
+  const breadList = [
+    {name: 'Trang chủ', link: '/'},
+    {name: region_name, link: ''},
+  ]
+  
   return (
     <Layout>
       <Head>
@@ -40,18 +45,9 @@ export default function DetailPage({areaList}) {
       </Head>
 
       <div className="container px-4 mx-auto py-12">
-      <Breadcrumb>
-          <li className="inline-flex items-center">
-            <Link href="/">Trang chủ</Link>
-            <svg className="h-4 w-auto text-gray-200" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-            </svg>
-          </li>
-          <li className="inline-flex items-center">
-            <a className="text-teal-400">{region_name}</a>
-          </li>
-        </Breadcrumb>
-        <h1 className="mt-6 text-3xl mb-4 font-semibold">Giá bất động sản {region_name}</h1>
+        <Breadcrumb List={breadList}/>
+        <PageTitle title={`Giá bất động sản ${region_name}`}   />
+        
         <div className="flex space-x-5">
           <div className="w-1/2">
             <p className="text-sm">Tỉnh {region_name} bao gồm: </p>
