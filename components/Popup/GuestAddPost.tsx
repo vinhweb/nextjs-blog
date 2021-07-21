@@ -148,7 +148,18 @@ const GuestAddPost = ({visible = false, setVisible}) => {
                 </label>
                 <input required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" name="gia_ban" id="gia_ban" type="number" placeholder=""/>
               </div>
-              <div className="col-span-2"></div>
+              <div className="col-span-2">
+                <label className="block text-gray-700 text-sm mb-2" htmlFor="gia_ban">
+                  Hình ảnh đính kèm
+                </label>
+                <input 
+                  type="file" 
+                  className="text-sm shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:shadow-outline" 
+                  name="files[]" 
+                  multiple 
+                  accept="image/*"
+                  onChange={onFileChange} />
+              </div>
               <div className="col-span-2">
                 <label className="block text-gray-700 text-sm mb-2" htmlFor="phone">
                   SĐT
@@ -169,7 +180,6 @@ const GuestAddPost = ({visible = false, setVisible}) => {
               </div>
 
 
-              <input type="file"  name="files[]" multiple onChange={onFileChange} />
             </div>
           </div>
           {/*end body */}
