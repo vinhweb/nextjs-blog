@@ -4,8 +4,8 @@ import _ from 'lodash'
 
 const PostList = ({data}) => {
   let postList = data.sort(function compare(a, b) {
-    let dateA = new Date(a.createdTime);
-    let dateB = new Date(b.createdTime);
+    let dateA:any = new Date(a.createdTime);
+    let dateB:any = new Date(b.createdTime);
     return dateB - dateA;
   });
   
