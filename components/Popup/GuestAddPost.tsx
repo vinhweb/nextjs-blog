@@ -188,10 +188,10 @@ const GuestAddPost = ({visible = false, setVisible}) => {
           <div className="sm:flex sm:flex-row-reverse mt-4">
             <button 
               type="submit"
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 sm:ml-3 sm:w-auto sm:text-sm">
+              className="inline-block w-full md:w-auto mb-2 ml-4 py-2 px-4 text-sm font-medium leading-normal bg-red-400 hover:bg-red-300 text-white rounded transition duration-200">
               Đăng tin
             </button>
-            <button onClick={()=>setVisible(!visible)} type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white  text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+            <button onClick={()=>setVisible(!visible)} type="button" className="inline-block w-full md:w-auto mb-2 py-2 px-4 text-sm font-medium leading-normal border border-gray-300 hover:border-gray-400 rounded">
               Hủy
             </button>
           </div>
