@@ -57,8 +57,8 @@ export default function DetailPage({areaList}) {
           <div className="w-1/2">
             <p className="text-sm">Tỉnh {region_name} bao gồm: </p>
             <ul className="list-disc list-inside my-2 grid grid-cols-2">
-              {areaListUnique.map(item => (
-                <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={item.id}>
+              {areaListUnique.map((item: any, index) => (
+                <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={index}>
                   <Link href={`/area/${item.area_id}`}>
                     {item.area_name} 
                   </Link>

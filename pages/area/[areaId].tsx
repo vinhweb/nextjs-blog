@@ -117,8 +117,8 @@ export default function DetailPage({wardList}) {
             <div className="w-1/2">
               <p className="text-sm">{area_name.trim()} thuộc tỉnh {region_name.trim()} bao gồm: </p>
               <ul className="list-disc list-inside my-2 grid grid-cols-2">
-                {wardList.map(item => (
-                  <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={item.id}>
+                {wardList.map((item, index) => (
+                  <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={index}>
                     <Link href={`/phan-tich-khu-vuc/${item.ward_id}`}>
                       {item.ward_name} 
                     </Link>
