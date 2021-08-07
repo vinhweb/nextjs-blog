@@ -10,6 +10,7 @@ import numberWithCommas from '../../utils/numberWithCommas'
 import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import { Bar } from 'react-chartjs-2';
 import PageTitle from '../../components/Head/PageTitle';
+import AreaTable from '../../components/Area/AreaTable';
 
 const containerStyle = {
   width: '100%',
@@ -40,7 +41,7 @@ export default function DetailPage({wardList}) {
       <p>Not found</p>
     )
   }
-
+  console.log(wardList)
   const {region_name, area_name, ward_name, region_geo, region_id, area_geo, area_id,
         dat, dat_arr, dat_mat_duong, dat_mat_duong_arr, dat_ngo_hem, dat_ngo_hem_arr,
         nha_o, nha_o_arr, nha_o_mat_duong, nha_o_mat_duong_arr, nha_o_ngo_hem, nha_o_ngo_hem_arr,
@@ -56,7 +57,7 @@ export default function DetailPage({wardList}) {
     labels: wardList.map(item=> item.ward_name),
     datasets: [
       {
-        label: `Đất tổng ${area_name.trim()}, tỉnh ${region_name.trim()} | Giá/m2`,
+        label: `Đất phổ biến ${area_name.trim()}, tỉnh ${region_name.trim()} | Giá/m2`,
         data: wardList.map(item => item.dat == "empty" ? 0 : item.dat),
         backgroundColor: [
           'rgba(218, 247, 166, 0.8)',
@@ -151,38 +152,7 @@ export default function DetailPage({wardList}) {
           </section>
 
           {/* Price Table */}
-          <section className="flex space-x-5 ">
-            <div className="w-full mt-10 overflow-hidden border border-gray-200 rounded">
-              <table className="table-fixed w-full text-sm divide-y divide-gray-200">
-                <thead>
-                  <tr>
-                    <th className="text-left p-3 w-3/12">Giá đất</th>
-                    <th className="p-3" style={{width: '14%'}}>Đất tổng</th>
-                    <th className="p-3" style={{width: '14%'}}>Đất mặt tiền</th>
-                    <th className="p-3" style={{width: '14%'}}>Đất ngõ hẻm</th>
-                    <th className="p-3" style={{width: '14%'}}>Nhà tổng</th>
-                    <th className="p-3" style={{width: '14%'}}>Nhà mặt tiền</th>
-                    <th className="p-3" style={{width: '14%'}}>Nhà ngõ hẻm</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-20">
-                  {wardList.map(item => (
-                    <tr key={item.id}>
-                      <td className="p-3 text-indigo-500 hover:text-indigo-400 transition">
-                        <Link href={`/phan-tich-khu-vuc/${item.ward_id}`}>{item.ward_name}</Link>
-                      </td>
-                      <td className="p-3 text-center">{item.dat == "empty" ? "-" : numberWithCommas(item.dat)}</td>
-                      <td className="p-3 text-center">{item.dat_mat_duong == "empty" ? "-" : numberWithCommas(item.dat_mat_duong)}</td>
-                      <td className="p-3 text-center">{item.dat_ngo_hem == "empty" ? "-" : numberWithCommas(item.dat_ngo_hem)}</td>
-                      <td className="p-3 text-center">{item.nha_o == "empty" ? "-" : numberWithCommas(item.nha_o)}</td>
-                      <td className="p-3 text-center">{item.nha_o_mat_duong == "empty" ? "-" : numberWithCommas(item.nha_o_mat_duong)}</td>
-                      <td className="p-3 text-center">{item.nha_o_ngo_hem == "empty" ? "-" : numberWithCommas(item.nha_o_ngo_hem)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+          <AreaTable wardList={wardList} />
           {/* End Price Table */}
         
           {/* Additional Info */}
