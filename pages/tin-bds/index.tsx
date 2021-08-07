@@ -38,10 +38,11 @@ export const getServerSideProps = async (context) => {
   // Area List
   postList = await base('guest')
     .select({
+      filterByFormula: `{public} = "checked"`,
     })
     .all()
     .catch(err => console.log(err));
-  if(!_.isEmpty(postList)){
+  if(!_.isEmpty(postList) && postList.length > 0){
     postList = postList.map(item => item._rawJson);
   }
 

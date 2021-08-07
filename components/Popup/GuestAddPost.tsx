@@ -82,7 +82,8 @@ const GuestAddPost = ({visible = false, setVisible}) => {
       gia_ban: e.target.gia_ban.value,
       email: e.target.email.value,
       chi_tiet: e.target.chi_tiet.value,
-      hinh_anh: imagesUpload
+      hinh_anh: imagesUpload,
+      hinh_anh_url: JSON.stringify(imagesUpload),
     }
     base('guest').create(formData, function(err, record) {
       if (err) {
