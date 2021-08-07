@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Layout, { siteTitle } from '../components/layout';
+import Layout, { siteTitle } from '../components/Layout/layout';
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import base from './../components/Airtable';

@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Layout, { siteTitle } from '../../components/layout'
+import Layout, { siteTitle } from '../../components/Layout/layout'
 import { useRouter, withRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import base from '../../components/Airtable';
@@ -7,7 +7,7 @@ import _ from 'lodash';
 import Breadcrumb from '../../components/Head/Breadcrumb';
 import Link from 'next/dist/client/link';
 import numberWithCommas from '../../utils/numberWithCommas'
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import { Bar } from 'react-chartjs-2';
 import { AnyNaptrRecord } from 'node:dns';
 import PageTitle from '../../components/Head/PageTitle';
@@ -16,6 +16,11 @@ const containerStyle = {
   width: '100%',
   height: '400px'
 };
+const infoWindowStyle = {
+  background: `white`,
+  border: `1px solid ##CCC`,
+  padding: 5,
+}
 
 export default function DetailPage({areaList}) {
   if(_.isEmpty(areaList)){
@@ -69,7 +74,12 @@ export default function DetailPage({areaList}) {
                 center={center}
                 zoom={11}
               >
-                <></>
+                <InfoWindow position={center}>
+                  <div style={infoWindowStyle}>
+                    <h1>Tỉnh {region_name}</h1>
+                  </div>
+                </InfoWindow>
+                <Marker position={center} />
               </GoogleMap>
             </LoadScript>
           </div>

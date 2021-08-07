@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Layout, { siteTitle } from '../../components/layout'
+import Layout, { siteTitle } from '../../components/Layout/layout'
 import base from '../../components/Airtable';
 import _ from 'lodash';
 import Breadcrumb from '../../components/Head/Breadcrumb';

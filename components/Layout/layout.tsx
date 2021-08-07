@@ -2,15 +2,19 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import GuestAddPost from './Popup/GuestAddPost'
+import GuestAddPost from '../Popup/GuestAddPost'
 import ReactNotification from 'react-notifications-component'
 
 const name = 'ThamDinhGiaAV'
 export const siteTitle = 'Thẩm định giá Bất động sản'
 
-export default function Layout({ children }) {
-  const [popup, setPopup] = useState(false)
+export default function Layout({ children, callPopup = false }) {
+  const [popup, setPopup] = useState(callPopup)
 
+  useEffect(() => {
+    setPopup(callPopup)
+  }, [callPopup])
+  
   return (
     <div>
       <ReactNotification />

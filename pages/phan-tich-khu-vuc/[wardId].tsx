@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Layout, { siteTitle } from '../../components/layout'
+import Layout, { siteTitle } from '../../components/Layout/layout'
 import { useRouter, withRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 import base from '../../components/Airtable';
@@ -7,7 +7,7 @@ import _ from 'lodash';
 import Breadcrumb from '../../components/Head/Breadcrumb';
 import Link from 'next/link';
 import numberWithCommas from '../../utils/numberWithCommas'
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import PageTitle from '../../components/Head/PageTitle';
 
 const containerStyle = {
@@ -15,7 +15,11 @@ const containerStyle = {
   height: '400px'
 };
 
-
+const infoWindowStyle = {
+  background: `white`,
+  border: `1px solid ##CCC`,
+  padding: 5,
+}
 
 export default function DetailPage({ward, wardList}) {
   if(_.isEmpty(ward)){
@@ -41,8 +45,16 @@ export default function DetailPage({ward, wardList}) {
     {name: area_name, link: `/area/${area_id}`},
     {name: ward_name, link: ''},
   ]
+
+  const [popupDangTin, setPopupDangTin] = useState(false);
+  const openPopup = ()=>{
+    setPopupDangTin(!popupDangTin)
+    console.log(popupDangTin)
+  }
+
+
   return (
-    <Layout>
+    <Layout callPopup={popupDangTin}>
       <Head>
         <title>{ward_name.trim()}, {area_name.trim()}, {region_name} - {siteTitle}</title>
       </Head>
@@ -72,7 +84,12 @@ export default function DetailPage({ward, wardList}) {
                 center={center}
                 zoom={13}
               >
-                <></>
+                <InfoWindow position={center}>
+                  <div style={infoWindowStyle}>
+                    <h1>{area_name.trim()}, {region_name.trim()}</h1>
+                  </div>
+                </InfoWindow>
+                <Marker position={center} />
               </GoogleMap>
             </LoadScript>
           </div>
@@ -146,16 +163,29 @@ export default function DetailPage({ward, wardList}) {
             </table>
           </div>
         </div>
-        <div>
-          <p className="mt-3 text-gray-600 italic text-xs">Giá tiền/m2. Updated 07/2021 By ThamDinhGiaAV.com</p>
-          <ul className="mt-5 text-gray-600 italic text-sm list-disc list-inside my-1 space-y-1">
-            <li>Các con số thống kê và phân tích dựa vào hàng triệu tin đăng của người dùng.</li>
-            <li>Đa số giá đất được khảo sát dựa vào giá đất thổ cư/ có giao dịch trên thị trường.</li>
-            <li>“Giá Nhà” có độ ưu tiên sau “Giá Đất” và nên được sử dụng khi thiêủ thông tin. </li>
-            <li>Con số đã được ThamdinhgiaAV xác minh sẽ được kèm dấu “*”</li>
-            <li>Độ tin cậy giảm dần theo màu số Màu đen &gt; Màu Cam &gt; Màu đỏ</li>
-          </ul>
-        </div>
+
+          {/* Additional Info */}
+          <section>
+            <div className="flex justify-between">
+              <div>
+                <ul className="mt-5 text-gray-600 italic text-sm list-disc list-inside my-1 space-y-1">
+                  <li>Các con số thống kê và phân tích dựa vào hàng triệu tin đăng của người dùng.</li>
+                  <li>Đa số giá đất được khảo sát dựa vào giá đất thổ cư/ có giao dịch trên thị trường.</li>
+                  <li>“Giá Nhà” có độ ưu tiên sau “Giá Đất” và nên được sử dụng khi thiêủ thông tin. </li>
+                  <li>Con số đã được ThamdinhgiaAV xác minh sẽ được kèm dấu “*”</li>
+                  <li>Độ tin cậy giảm dần theo màu số Màu đen &gt; Màu Cam &gt; Màu đỏ</li>
+                </ul>
+              </div>
+              <div>
+                <p className="mt-3 text-gray-600 italic text-xs">Giá tiền/m2. Updated 07/2021 By ThamDinhGiaAV.com</p>
+                <a target="_blank" rel="noopener noreferrer" href={`https://maps.google.com/?q=${center.lat},${center.lng}`} className="cursor-pointer text-sm p-3 text-indigo-500 hover:text-indigo-400 transition">
+                  Chỉ đường đếm đây
+                </a>
+                <a onClick={()=>openPopup()} className="cursor-pointer text-sm p-3 text-indigo-500 hover:text-indigo-400 transition">Tôi có tài sản tốt hơn!</a>
+              </div>
+            </div>
+          </section>
+          {/* End Additional Info */}
 
       </div>
     </Layout>
