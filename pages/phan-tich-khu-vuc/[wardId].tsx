@@ -10,6 +10,7 @@ import numberWithCommas from '../../utils/numberWithCommas'
 import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import PageTitle from '../../components/Head/PageTitle';
 import WardTable from '../../components/Ward/WardTable';
+import Image from 'next/image'
 
 const containerStyle = {
   width: '100%',
@@ -33,7 +34,7 @@ export default function DetailPage({ward, wardList}) {
         dat, dat_arr, dat_mat_duong, dat_mat_duong_arr, dat_ngo_hem, dat_ngo_hem_arr,
         nha_o, nha_o_arr, nha_o_mat_duong, nha_o_mat_duong_arr, nha_o_ngo_hem, nha_o_ngo_hem_arr,
         can_ho,
-        van_phong} = ward;
+        van_phong, image} = ward;
   
   const center = {
     lat: JSON.parse("[" + area_geo + "]")[0],
@@ -52,6 +53,9 @@ export default function DetailPage({ward, wardList}) {
     setPopupDangTin(!popupDangTin)
     console.log(popupDangTin)
   }
+
+  const featureImgUrl = _.isEmpty(image) ? '' : image[0].url;
+
 
 
   return (
@@ -96,9 +100,8 @@ export default function DetailPage({ward, wardList}) {
           </div>
         </div>
         
-        {/* Ward Price Table */}
-        
-        {/* End Ward Price Table */}
+
+
         <WardTable ward={ward} />
         {/* Additional Info */}
         <section>
@@ -122,6 +125,14 @@ export default function DetailPage({ward, wardList}) {
           </div>
         </section>
         {/* End Additional Info */}
+
+        <div className="flex space-x-5 mt-5">
+          <div className="img w-1/2 relative rounded-lg overflow-hidden">
+            {featureImgUrl && (
+              <Image className="object-center object-cover" src={featureImgUrl} width="400" height='400' layout='responsive' />
+            )}
+          </div>
+        </div>
 
       </div>
     </Layout>
