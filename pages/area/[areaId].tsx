@@ -129,7 +129,7 @@ export default function DetailPage({wardList}) {
             </div>
 
             <div className="w-1/2">
-              <LoadScript googleMapsApiKey="AIzaSyAJI6_202nasUHYbQSVV-JGA4E9VScpIpE">
+              <LoadScript googleMapsApiKey="AIzaSyAQik_lAMYYlVdnkDnZRiMvEEXHCuyQZcw">
                 <GoogleMap
                   mapContainerStyle={containerStyle}
                   center={center}
