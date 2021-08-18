@@ -6,4 +6,5 @@ module.exports = {
   images: {
     domains: ['dl.airtable.com'],
   },
+  webpack5: false,
 }

@@ -68,7 +68,7 @@ export default function DetailPage({areaList}) {
           </div>
 
           <div className="w-1/2">
-            <LoadScript googleMapsApiKey="AIzaSyAQik_lAMYYlVdnkDnZRiMvEEXHCuyQZcw">
+            <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLEMAP}>
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}

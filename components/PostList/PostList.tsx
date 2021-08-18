@@ -1,6 +1,5 @@
 import React from 'react'
 import PostItem from './PostItem'
-import _ from 'lodash'
 
 const PostList = ({data}) => {
   let postList = data.sort(function compare(a, b) {
@@ -11,8 +10,8 @@ const PostList = ({data}) => {
   
   return (
     <div className="space-y-8">
-      {postList.map(item => (
-        <PostItem data={item} />
+      {postList.map((item, index) => (
+        <PostItem key={index} data={item} />
       ))}
     </div>
   )

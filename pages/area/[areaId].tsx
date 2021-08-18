@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../../components/Layout/layout'
-import { useRouter, withRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import base from '../../components/Airtable';
 import _ from 'lodash';
 import Breadcrumb from '../../components/Head/Breadcrumb';
 import Link from 'next/dist/client/link';
-import numberWithCommas from '../../utils/numberWithCommas'
 import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import { Bar } from 'react-chartjs-2';
 import PageTitle from '../../components/Head/PageTitle';
@@ -129,7 +127,7 @@ export default function DetailPage({wardList}) {
             </div>
 
             <div className="w-1/2">
-              <LoadScript googleMapsApiKey="AIzaSyAQik_lAMYYlVdnkDnZRiMvEEXHCuyQZcw">
+              <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLEMAP}>
                 <GoogleMap
                   mapContainerStyle={containerStyle}
                   center={center}

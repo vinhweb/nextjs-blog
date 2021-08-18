@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../../components/Layout/layout'
-import { useRouter, withRouter } from 'next/router';
-import { Fragment, useEffect, useState } from 'react';
+import { useState } from 'react';
 import base from '../../components/Airtable';
 import _ from 'lodash';
 import Breadcrumb from '../../components/Head/Breadcrumb';
 import Link from 'next/link';
-import numberWithCommas from '../../utils/numberWithCommas'
 import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/api';
 import PageTitle from '../../components/Head/PageTitle';
 import WardTable from '../../components/Ward/WardTable';
@@ -72,7 +70,7 @@ export default function DetailPage({ward, wardList}) {
           <div className="w-1/2">
             <p className="text-sm">{ward_name.trim()} là 1 trong {wardList.length} xã (phường/ thị trấn) thuộc {area_name.trim()} bao gồm: </p>
             <ul className="list-disc list-inside my-2 grid grid-cols-2">
-              {wardList.map(item => (
+              {wardList.map((item, index) => (
                 <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={item.id}>
                   <Link href={`/phan-tich-khu-vuc/${item.ward_id}`}>
                     {item.ward_name} 
@@ -83,7 +81,7 @@ export default function DetailPage({ward, wardList}) {
           </div>
 
           <div className="w-1/2">
-            <LoadScript googleMapsApiKey="AIzaSyAQik_lAMYYlVdnkDnZRiMvEEXHCuyQZcw">
+            <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLEMAP}>
               <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
