@@ -9,6 +9,7 @@ import { GoogleMap, Marker, InfoWindow, LoadScript } from '@react-google-maps/ap
 import PageTitle from '../../components/Head/PageTitle';
 import WardTable from '../../components/Ward/WardTable';
 import Image from 'next/image'
+import WardSlider from "../../components/Ward/WardSlider";
 
 const containerStyle = {
   width: '100%',
@@ -103,6 +104,8 @@ export default function WardId({ward, wardList}) {
 
 
         <WardTable ward={ward} />
+
+
         {/* Additional Info */}
         <section>
           <div className="flex justify-between">
@@ -127,10 +130,15 @@ export default function WardId({ward, wardList}) {
         {/* End Additional Info */}
 
         <div className="flex space-x-5 mt-5">
-          <div className="img w-1/2 relative rounded-lg overflow-hidden">
-            {featureImgUrl && (
-              <Image className="object-center object-cover" src={featureImgUrl} width="400" height='400' layout='responsive' />
-            )}
+          <div className="w-1/2">
+            <div className="img relative rounded-lg overflow-hidden">
+              {featureImgUrl && (
+                  <Image className="object-center object-cover" src={featureImgUrl} width="400" height='400' layout='responsive' />
+              )}
+            </div>
+          </div>
+          <div className="w-1/2">
+            <WardSlider averagePrice={parseInt(dat)}/>
           </div>
         </div>
 
