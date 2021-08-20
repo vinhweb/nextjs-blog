@@ -121,7 +121,7 @@ export default function WardId({ward, wardList}) {
             <div>
               <p className="mt-3 text-gray-600 italic text-xs">Giá tiền/m2. Updated 07/2021 By ThamDinhGiaAV.com</p>
               <a target="_blank" rel="noopener noreferrer" href={`https://maps.google.com/?q=${center.lat},${center.lng}`} className="cursor-pointer text-sm p-3 text-indigo-500 hover:text-indigo-400 transition">
-                Chỉ đường đếm đây
+                Chỉ đường đến đây
               </a>
               <a onClick={()=>openPopup()} className="cursor-pointer text-sm p-3 text-indigo-500 hover:text-indigo-400 transition">Tôi có tài sản tốt hơn!</a>
             </div>

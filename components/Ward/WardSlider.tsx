@@ -6,7 +6,7 @@ import {
     Box
 } from "@chakra-ui/react"
 import {useState} from "react";
-import {numberWithCommas} from "../../utils/Utils";
+import {getNumberWithCommas} from "../../utils/Utils";
 
 const WardSlider = ({averagePrice = 0}) => {
     const [area, setArea] = useState({
@@ -16,7 +16,7 @@ const WardSlider = ({averagePrice = 0}) => {
 
     const calculatePrice = (val)=>{
         let price: any;
-        price = numberWithCommas(val * averagePrice);
+        price = getNumberWithCommas(val * averagePrice);
 
         setArea({
             value: val,
@@ -45,7 +45,17 @@ const WardSlider = ({averagePrice = 0}) => {
 
                 <Box className={'mt-4'}>
                     <div className={'text-gray-500'}>Giá đất sơ bộ nhanh cho {area.value}m² là</div>
-                    <div className={'text-lg font-semibold'}>{area.price} đ</div>
+                    <div className={'text-lg mb-4 font-semibold'}>{area.price} đ</div>
+                    <div className="text-sm text-gray-600 xl:w-9/12 mx-auto">
+                        <div className={'flex justify-between'}>
+                            <span>Đơn giá trung bình của đất phổ biến: </span>
+                            <span>{getNumberWithCommas(averagePrice)}đ</span>
+                        </div>
+                        <div className={'flex justify-between'}>
+                            <span>Giá Đất Sơ Bộ Tại vị trí này là: </span>
+                            <span>{area.price}đ</span>
+                        </div>
+                    </div>
                 </Box>
             </div>
         </>

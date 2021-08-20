@@ -13,7 +13,7 @@ module.exports = {
         return data;
     },
 
-    numberWithCommas: function(x=0) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    getNumberWithCommas: function(x=0) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 }
