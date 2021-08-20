@@ -22,7 +22,7 @@ const infoWindowStyle = {
   padding: 5,
 }
 
-export default function DetailPage({areaList}) {
+export default function RegionId({areaList}) {
   if(_.isEmpty(areaList)){
     return(
       <p>Not found</p>

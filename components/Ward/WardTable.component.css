@@ -1,0 +1,4 @@
+.approved:after{
+    content: "*";
+    font-size: 0.85em;
+}

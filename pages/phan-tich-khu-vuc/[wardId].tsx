@@ -21,12 +21,14 @@ const infoWindowStyle = {
   padding: 5,
 }
 
-export default function DetailPage({ward, wardList}) {
+export default function WardId({ward, wardList}) {
   if(_.isEmpty(ward)){
     return(
       <p>Not found</p>
     )
   }
+
+  console.log(ward)
 
   const {region_name, area_name, ward_name, region_geo, region_id, area_geo, area_id,
         dat, dat_arr, dat_mat_duong, dat_mat_duong_arr, dat_ngo_hem, dat_ngo_hem_arr,
@@ -104,8 +106,8 @@ export default function DetailPage({ward, wardList}) {
         {/* Additional Info */}
         <section>
           <div className="flex justify-between">
-            <div>
-              <ul className="mt-5 text-gray-600 italic text-sm list-disc list-inside my-1 space-y-1">
+            <div className="mt-2">
+              <ul className="text-gray-600 italic text-xs list-disc list-inside my-1 space-y-1 space-y-1">
                 <li>Các con số thống kê và phân tích dựa vào hàng triệu tin đăng của người dùng.</li>
                 <li>Đa số giá đất được khảo sát dựa vào giá đất thổ cư/ có giao dịch trên thị trường.</li>
                 <li>“Giá Nhà” có độ ưu tiên sau “Giá Đất” và nên được sử dụng khi thiêủ thông tin. </li>

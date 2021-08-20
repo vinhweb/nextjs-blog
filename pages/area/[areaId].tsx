@@ -33,7 +33,7 @@ const infoWindowStyle = {
   padding: 5,
 }
 
-export default function DetailPage({wardList}) {
+export default function AreaId({wardList}) {
   if(_.isEmpty(wardList)){
     return(
       <p>Not found</p>
@@ -158,7 +158,7 @@ export default function DetailPage({wardList}) {
             <div className="flex justify-between">
               <div>
                 <p className="mt-3 text-gray-600 italic text-xs">Bấm vào Xã/ Phường/ Thị Trấn để có giá xác thục hơn!</p>
-                <ul className="mt-5 text-gray-600 italic text-sm list-disc list-inside my-1 space-y-1">
+                <ul className="text-gray-600 italic text-xs list-disc list-inside my-1 space-y-1 space-y-1">
                   <li>Các con số thống kê và phân tích dựa vào hàng triệu tin đăng của người dùng.</li>
                   <li>Đa số giá đất được khảo sát dựa vào giá đất thổ cư/ có giao dịch trên thị trường.</li>
                   <li>“Giá Nhà” có độ ưu tiên sau “Giá Đất” và nên được sử dụng khi thiêủ thông tin. </li>
