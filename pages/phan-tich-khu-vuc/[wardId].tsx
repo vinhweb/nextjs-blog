@@ -10,6 +10,7 @@ import PageTitle from '../../components/Head/PageTitle';
 import WardTable from '../../components/Ward/WardTable';
 import Image from 'next/image'
 import WardSlider from "../../components/Ward/WardSlider";
+import PopupCalculateConstruction from "../../components/Ward/PopupCalculateConstruction";
 
 const containerStyle = {
   width: '100%',
@@ -28,8 +29,6 @@ export default function WardId({ward, wardList}) {
       <p>Not found</p>
     )
   }
-
-  console.log(ward)
 
   const {region_name, area_name, ward_name, region_geo, region_id, area_geo, area_id,
         dat, dat_arr, dat_mat_duong, dat_mat_duong_arr, dat_ngo_hem, dat_ngo_hem_arr,
@@ -52,13 +51,14 @@ export default function WardId({ward, wardList}) {
   const [popupDangTin, setPopupDangTin] = useState(false);
   const openPopup = ()=>{
     setPopupDangTin(!popupDangTin)
-    console.log(popupDangTin)
   }
 
   const featureImgUrl = _.isEmpty(image) ? '' : image[0].url;
 
 
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <Layout callPopup={popupDangTin}>
       <Head>
@@ -139,6 +139,7 @@ export default function WardId({ward, wardList}) {
           </div>
           <div className="w-1/2">
             <WardSlider averagePrice={parseInt(dat)}/>
+            <PopupCalculateConstruction subtitle={`${ward_name.trim()}, ${area_name.trim()}, ${region_name}`} />
           </div>
         </div>
 

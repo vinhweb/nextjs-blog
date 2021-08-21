@@ -5,10 +5,14 @@ import {
     SliderThumb,
     Box
 } from "@chakra-ui/react"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getNumberWithCommas} from "../../utils/Utils";
 
 const WardSlider = ({averagePrice = 0}) => {
+    if(averagePrice === 0) {
+        return <div></div>;
+    }
+
     const [area, setArea] = useState({
         value: 0,
         price: 0
@@ -24,6 +28,10 @@ const WardSlider = ({averagePrice = 0}) => {
         })
     }
 
+    useEffect(()=>{
+        calculatePrice(25)
+    }, [])
+
     return (
         <>
             <div className={'text-center'}>
@@ -33,7 +41,7 @@ const WardSlider = ({averagePrice = 0}) => {
                 </div>
                 <div className={'flex'}>
                     <span className={'whitespace-nowrap text-sm px-2 mr-3'}>25m²</span>
-                    <Slider defaultValue={25} min={0} max={500} step={25}  onChange={(val) => calculatePrice(val)}>
+                    <Slider defaultValue={25} min={0} max={500} step={25} onChange={(val) => calculatePrice(val)}>
                         <SliderTrack >
                             <Box position="relative" right={10} />
                             <SliderFilledTrack />
