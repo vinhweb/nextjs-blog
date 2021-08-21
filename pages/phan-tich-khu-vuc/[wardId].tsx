@@ -139,7 +139,8 @@ export default function WardId({ward, wardList}) {
           </div>
           <div className="w-1/2">
             <WardSlider averagePrice={parseInt(dat)}/>
-            <PopupCalculateConstruction subtitle={`${ward_name.trim()}, ${area_name.trim()}, ${region_name}`} />
+            <PopupCalculateConstruction averagePrice={parseInt(dat)}
+                                        subtitle={`${ward_name.trim()}, ${area_name.trim()}, ${region_name}`} />
           </div>
         </div>
 

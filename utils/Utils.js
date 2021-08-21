@@ -4,7 +4,7 @@ module.exports = {
     },
 
     // clear object
-    onClearProperties: function(data) {
+    clearProperties: function(data) {
         for (const property in data) {
             if (data.hasOwnProperty(property)) {
                 data[property] = '';
