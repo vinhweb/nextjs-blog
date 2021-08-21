@@ -1,4 +1,4 @@
-import React, {Children} from 'react'
+import React, {Children, useImperativeHandle, forwardRef} from 'react'
 import {
     Modal,
     ModalOverlay,
@@ -9,11 +9,24 @@ import {
     ModalCloseButton, useDisclosure, Button,
 } from "@chakra-ui/react"
 
-const DefaultModal = ({children, size='md'}) => {
+// @ts-ignore
+const DefaultModal = forwardRef(({children, size = 'md', isCentered=false}, ref) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const initialRef = React.useRef()
 
     let _header, _body, _footer, _button
+
+    useImperativeHandle(
+        ref,
+        () => ({
+            openModal(){
+                onOpen();
+            },
+            closeModal(){
+                onClose();
+            }
+        }),
+    )
 
     Children.forEach(children, child => {
         if (child.type === DefaultModalButton) {
@@ -32,15 +45,14 @@ const DefaultModal = ({children, size='md'}) => {
 
     return (
         <>
-            <div onClick={onOpen}>
-                {_button}
-            </div>
             <Modal
+                isCentered={isCentered}
                 initialFocusRef={initialRef}
                 onClose={onClose}
                 isOpen={isOpen}
                 motionPreset="slideInBottom"
                 size={size}
+                scrollBehavior={'inside'}
             >
                 <ModalOverlay/>
                 <ModalContent>
@@ -49,13 +61,13 @@ const DefaultModal = ({children, size='md'}) => {
                     {_body}
                     <ModalFooter>
                         {_footer}
-                        <Button ml={3} variant="ghost" onClick={onClose}>Đóng</Button>
+                        <Button ml={3} onClick={onClose}>Đóng</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
     )
-}
+})
 
 export default DefaultModal
 

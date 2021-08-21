@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../../components/Layout/layout'
-import { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import base from '../../components/Airtable';
 import _ from 'lodash';
 import Breadcrumb from '../../components/Head/Breadcrumb';
@@ -11,6 +11,8 @@ import WardTable from '../../components/Ward/WardTable';
 import Image from 'next/image'
 import WardSlider from "../../components/Ward/WardSlider";
 import PopupCalculateConstruction from "../../components/Ward/PopupCalculateConstruction";
+import {Button} from "@chakra-ui/react";
+import PopupCalculateAdvance from "../../components/Ward/PopupCalculateAdvance";
 
 const containerStyle = {
   width: '100%',
@@ -23,19 +25,24 @@ const infoWindowStyle = {
   padding: 5,
 }
 
-export default function WardId({ward, wardList}) {
+export default function WardId({ward, wardList, listConst}) {
+
   if(_.isEmpty(ward)){
     return(
       <p>Not found</p>
     )
   }
 
+  useEffect(()=>{
+    localStorage.setItem('listConst', JSON.stringify(listConst))
+  }, [])
+
   const {region_name, area_name, ward_name, region_geo, region_id, area_geo, area_id,
         dat, dat_arr, dat_mat_duong, dat_mat_duong_arr, dat_ngo_hem, dat_ngo_hem_arr,
         nha_o, nha_o_arr, nha_o_mat_duong, nha_o_mat_duong_arr, nha_o_ngo_hem, nha_o_ngo_hem_arr,
         can_ho,
         van_phong, image} = ward;
-  
+
   const center = {
     lat: JSON.parse("[" + area_geo + "]")[0],
     lng: JSON.parse("[" + area_geo + "]")[1]
@@ -55,7 +62,8 @@ export default function WardId({ward, wardList}) {
 
   const featureImgUrl = _.isEmpty(image) ? '' : image[0].url;
 
-
+  const [constModal, setConstModal] = useState(0)
+  const [advanceModal, setAdvanceModal] = useState(0)
 
   // @ts-ignore
   // @ts-ignore
@@ -74,9 +82,9 @@ export default function WardId({ward, wardList}) {
             <p className="text-sm">{ward_name.trim()} là 1 trong {wardList.length} xã (phường/ thị trấn) thuộc {area_name.trim()} bao gồm: </p>
             <ul className="list-disc list-inside my-2 grid grid-cols-2">
               {wardList.map((item, index) => (
-                <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={item.id}>
+                <li className="text-sm text-indigo-500 hover:text-indigo-400 transition py-1" key={index}>
                   <Link href={`/phan-tich-khu-vuc/${item.ward_id}`}>
-                    {item.ward_name} 
+                    {item.ward_name}
                   </Link>
                 </li>
               ))}
@@ -100,7 +108,7 @@ export default function WardId({ward, wardList}) {
             </LoadScript>
           </div>
         </div>
-        
+
 
 
         <WardTable ward={ward} />
@@ -139,7 +147,15 @@ export default function WardId({ward, wardList}) {
           </div>
           <div className="w-1/2">
             <WardSlider averagePrice={parseInt(dat)}/>
-            <PopupCalculateConstruction averagePrice={parseInt(dat)}
+            <Button onClick={()=> setConstModal(constModal+1)} className={'mt-5 mr-3'} variant="outline" size="sm" colorScheme="blue">
+              Tính giá công trình
+            </Button>
+            <Button onClick={()=> setAdvanceModal(advanceModal+1)} className={'mt-5'} variant="outline" size="sm" colorScheme="blue">
+              Định giá chuyên sâu
+            </Button>
+            <PopupCalculateConstruction openRelated={()=>setAdvanceModal(advanceModal+1)} openModal={constModal} averagePrice={parseInt(dat)}
+                                        subtitle={`${ward_name.trim()}, ${area_name.trim()}, ${region_name}`} />
+            <PopupCalculateAdvance openModal={advanceModal} averagePrice={parseInt(dat)}
                                         subtitle={`${ward_name.trim()}, ${area_name.trim()}, ${region_name}`} />
           </div>
         </div>
@@ -154,9 +170,9 @@ export const getServerSideProps = async (context) => {
   const {params} = context;
   const wardId = params.wardId;
   let ward:any,
-      wardList: any;
-  
-  //Ward Select
+      wardList: any,
+      listConst: any;
+
   const wards = await base('main_data')
     .select({
       maxRecords: 1,
@@ -169,9 +185,8 @@ export const getServerSideProps = async (context) => {
   if(!_.isEmpty(wards)){
     ward = wards[0].fields
   }
-  //Ward Select
 
-  // Ward List
+
   wardList = await base('ward')
     .select({
       filterByFormula: `{area_id} = "${ward.area_id}"`,
@@ -182,12 +197,21 @@ export const getServerSideProps = async (context) => {
   if(!_.isEmpty(wardList)){
     wardList = wardList.map(item => item.fields);
   }
-  // End Ward List
+
+  listConst = await base('listConst')
+      .select({
+      })
+      .all()
+      .catch(err => console.log(err));
+  if(!_.isEmpty(listConst)){
+    listConst = listConst.map(item => item.fields);
+  }
 
   return{
     props: {
       ward,
-      wardList
+      wardList,
+      listConst
     }
   }
 }

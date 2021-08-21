@@ -7,11 +7,30 @@ import {
     Select,
     Button, Input
 } from "@chakra-ui/react"
-import React from "react";
-import _ from 'lodash';
+import React, {useEffect, useRef} from "react";
 import { getNumberWithCommas } from "../../utils/Utils";
 
-const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
+const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRelated}) => {
+    const constRef = useRef();
+    const [loaiCongTrinh, setLoaiCongTrinh] = React.useState([])
+
+    useEffect(()=>{
+        let listConst = []
+        listConst = JSON.parse(localStorage.getItem('listConst'))
+        setLoaiCongTrinh(listConst.filter(item => item.type == 'loai_cong_trinh_xay_dung'))
+    }, [])
+
+    const onOpenModal = () => {
+        constRef.current.openModal()
+    }
+
+    useEffect(()=>{
+        if (openModal > 0){
+            onOpenModal()
+        }
+    }, [openModal])
+
+
     const [result, setResult] = React.useState({
         giaCongTrinh: 0,
         giaSoBo: 0
@@ -24,11 +43,9 @@ const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
     });
     const onHandleChange = e => setFormData({...formData, [e.target.name]: e.target.value});
 
-
     const onSubmit = async (e)=>{
         e.preventDefault()
 
-        console.log(formData)
         let yearInUse = formData.yearInUse;
         if(yearInUse >= 1 && yearInUse <= 18){
             yearInUse = 100 - (5*yearInUse);
@@ -37,7 +54,6 @@ const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
         }
         yearInUse = yearInUse/100
 
-        console.log(yearInUse)
         setResult({
             giaCongTrinh: formData.totalArea * formData.constType * yearInUse,
             giaSoBo: formData.totalArea * averagePrice
@@ -45,12 +61,9 @@ const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
     }
     return (
         <>
-            <DefaultModal size={'xl'}>
-                <DefaultModal.Button>
-                    <Button className={'mt-5'} variant="outline" size="sm" colorScheme="blue">
-                        Tính giá công trình
-                    </Button>
-                </DefaultModal.Button>
+            <DefaultModal
+                ref={constRef}
+                size={'xl'}>
                 <DefaultModal.Header>Tính Giá Công Trình</DefaultModal.Header>
                 <DefaultModal.Body>
                     <form onSubmit={onSubmit}>
@@ -76,11 +89,12 @@ const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
                             <FormLabel>Loại công trình xây dựng</FormLabel>
                             <Select isRequired={true} placeholder="Lựa chọn"
                                     name={'constType'} onChange={e=>onHandleChange(e)} value={formData.constType}>
-                                <option value="4500000">Nhà Cao Cấp</option>
-                                <option value="4000000">Nhà Cấp 3</option>
-                                <option value="3000000">Nhà Cấp 4, Nhà Xưởng, Nhà</option>
+                                {loaiCongTrinh.map(item => (
+                                    <option key={item.value} value={parseInt(item.value)}>{item.name}</option>
+                                ))}
                             </Select>
                         </FormControl>
+
 
                         <Button
                             className={'mt-5'} variant="outline" size="sm" colorScheme="blue"
@@ -112,7 +126,7 @@ const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
                         </div>
                         )}
 
-                        <p className={'mt-3 text-sm'}>Cần chính xác hơn? Tiếp tục <a className={'text-indigo-600 font-semibold'} href="">Định giá chuyên sâu</a></p>
+                        <p className={'mt-3 text-sm'}>Cần chính xác hơn? Tiếp tục <a onClick={()=>openRelated()} className={'text-indigo-600 cursor-pointer font-semibold'} >Định giá chuyên sâu</a></p>
 
                     </form>
                 </DefaultModal.Body>
