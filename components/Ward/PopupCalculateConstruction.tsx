@@ -28,13 +28,16 @@ const PopupCalculateConstruction = ({subtitle, averagePrice}) => {
     const onSubmit = async (e)=>{
         e.preventDefault()
 
+        console.log(formData)
         let yearInUse = formData.yearInUse;
-        if(yearInUse > 1){
+        if(yearInUse >= 1 && yearInUse <= 18){
             yearInUse = 100 - (5*yearInUse);
-            yearInUse = (yearInUse < 10) ? 10 : yearInUse;
+        }else{
+            yearInUse = 10;
         }
         yearInUse = yearInUse/100
 
+        console.log(yearInUse)
         setResult({
             giaCongTrinh: formData.totalArea * formData.constType * yearInUse,
             giaSoBo: formData.totalArea * averagePrice
