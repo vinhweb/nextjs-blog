@@ -11,7 +11,6 @@ import React, {useEffect, useRef} from "react";
 import { getNumberWithCommas } from "../../utils/Utils";
 
 const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRelated}) => {
-    const constRef = useRef();
     const [loaiCongTrinh, setLoaiCongTrinh] = React.useState([])
 
     useEffect(()=>{
@@ -19,17 +18,6 @@ const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRela
         listConst = JSON.parse(localStorage.getItem('listConst'))
         setLoaiCongTrinh(listConst.filter(item => item.type == 'loai_cong_trinh_xay_dung'))
     }, [])
-
-    const onOpenModal = () => {
-        constRef.current.openModal()
-    }
-
-    useEffect(()=>{
-        if (openModal > 0){
-            onOpenModal()
-        }
-    }, [openModal])
-
 
     const [result, setResult] = React.useState({
         giaCongTrinh: 0,
@@ -62,7 +50,7 @@ const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRela
     return (
         <>
             <DefaultModal
-                ref={constRef}
+                openModal={openModal}
                 size={'xl'}>
                 <DefaultModal.Header>Tính Giá Công Trình</DefaultModal.Header>
                 <DefaultModal.Body>

@@ -8,13 +8,11 @@ import {
     Button, Input,
     Radio, RadioGroup, Stack
 } from "@chakra-ui/react"
-import React, {useEffect, useRef} from "react";
+import React, {useEffect} from "react";
 import _ from 'lodash';
 import { getNumberWithCommas } from "../../utils/Utils";
 
 const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
-    const constRef = useRef();
-
     const [listConst, setListConst] = React.useState({
         loai_cong_trinh_xay_dung: [],
         loai_BDS: [],
@@ -63,18 +61,6 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
             lam_duoc: listConst.filter(item => item.type == 'lam_duoc')
         })
     }, [])
-
-
-    const onOpenModal = () => {
-        constRef.current.openModal()
-    }
-
-    useEffect(()=>{
-        if (openModal > 0){
-            onOpenModal()
-        }
-    }, [openModal])
-
 
     const [result, setResult] = React.useState({
         giaCongTrinh: 0,
@@ -128,8 +114,8 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
     return (
         <>
             <DefaultModal
+                openModal={openModal}
                 isCentered={true}
-                ref={constRef}
                 size={'xl'}>
                 <DefaultModal.Header>Định giá chuyên sâu</DefaultModal.Header>
                 <DefaultModal.Body>
@@ -256,7 +242,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Có vỉa hè</FormLabel>
-                                <RadioGroup onChange={e=>setFormData({...formData, co_via_he: e})} value={`${formData.co_via_he}`}>
+                                <RadioGroup onChange={e=>setFormData({...formData, co_via_he: parseInt(e)})} value={`${formData.co_via_he}`}>
                                     <Stack direction="row">
                                         {listConst.co_via_he.map(item => (
                                             <Radio key={item.name} value={`${item.tang_giam_gia}`}>{item.name}</Radio>
@@ -364,8 +350,6 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </div>
                         </div>
                         )}
-
-
                     </form>
                 </DefaultModal.Body>
                 <DefaultModal.Footer>

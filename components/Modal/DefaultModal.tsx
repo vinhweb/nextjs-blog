@@ -1,4 +1,4 @@
-import React, {Children, useImperativeHandle, forwardRef} from 'react'
+import React, {Children, useEffect} from 'react'
 import {
     Modal,
     ModalOverlay,
@@ -10,23 +10,26 @@ import {
 } from "@chakra-ui/react"
 
 // @ts-ignore
-const DefaultModal = forwardRef(({children, size = 'md', isCentered=false}, ref) => {
+const DefaultModal = ({children, size = 'md', isCentered=false, openModal}) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
+
+    function onOpenModal(){
+        onOpen();
+    }
+
+    function onCloseModal(){
+        onClose();
+    }
+
+    useEffect(()=>{
+        if (openModal > 0){
+            onOpenModal()
+        }
+    }, [openModal])
+
     const initialRef = React.useRef()
 
     let _header, _body, _footer, _button
-
-    useImperativeHandle(
-        ref,
-        () => ({
-            openModal(){
-                onOpen();
-            },
-            closeModal(){
-                onClose();
-            }
-        }),
-    )
 
     Children.forEach(children, child => {
         if (child.type === DefaultModalButton) {
@@ -67,7 +70,7 @@ const DefaultModal = forwardRef(({children, size = 'md', isCentered=false}, ref)
             </Modal>
         </>
     )
-})
+}
 
 export default DefaultModal
 
