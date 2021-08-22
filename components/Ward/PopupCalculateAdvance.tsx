@@ -13,6 +13,7 @@ import _ from 'lodash';
 import { getNumberWithCommas } from "../../utils/Utils";
 
 const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
+    const [formStep, setFormStep] = React.useState(0)
     const [listConst, setListConst] = React.useState({
         loai_cong_trinh_xay_dung: [],
         loai_BDS: [],
@@ -62,10 +63,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
         })
     }, [])
 
-    const [result, setResult] = React.useState({
-        giaCongTrinh: 0,
-        giaSoBo: 0
-    });
+    const [result, setResult] = React.useState(0);
 
     const [formData, setFormData] = React.useState({
         totalArea: 0,
@@ -105,11 +103,32 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
         }
         yearInUse = yearInUse/100
 
+        let tangGiamPercent: any;
+        tangGiamPercent =
+            +formData.loai_BDS +
+            +formData.so_phap_ly +
+            +formData.loai_duong +
+            +formData.diem_manh +
+            +formData.diem_yeu +
+            +formData.duong_rong +
+            +formData.ra_duong_lon_hon +
+            +formData.gan_dia_diem_dep +
+            +formData.loai_hem +
+            +formData.hang_xom_dep +
+            +formData.co_via_he +
+            +formData.do_dep_nha +
+            +formData.do_rong_mat_truoc +
+            +formData.hoan_cong_trong_so +
+            +formData.duoc_xay_dung +
+            +formData.tiem_nang +
+            +formData.cung_cau +
+            +formData.lam_duoc
 
-        setResult({
-            giaCongTrinh: formData.totalArea * formData.constType * yearInUse,
-            giaSoBo: formData.totalArea * averagePrice
-        })
+        console.log(formData)
+        console.log(tangGiamPercent)
+        let result: number = (formData.totalArea * formData.constType * yearInUse)*(100 + tangGiamPercent)/100
+
+        setResult(result)
     }
     return (
         <>
@@ -123,7 +142,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                         <p>{subtitle}</p>
 
-                        <div className="grid grid-cols-2 gap-x-3 text-sm">
+                        <div className={`grid grid-cols-2 gap-x-3 text-sm ${(formStep !== 0) && 'hidden'}`}>
                             <FormControl mt={4}>
                                 <FormLabel>Diện tích sàn</FormLabel>
                                 <Input isRequired={true} type={'number'} placeholder="Tổng diện tích sử dụng (m2)"
@@ -139,17 +158,17 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Loại công trình xây dựng</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'constType'} onChange={e=>onHandleChange(e)} value={formData.constType}>
                                     {listConst.loai_cong_trinh_xay_dung.map(item => (
-                                        <option key={item.value} value={parseInt(item.value)}>{item.name}</option>
+                                        <option key={item.value} value={item.value}>{item.name}</option>
                                     ))}
                                 </Select>
                             </FormControl>
 
                             <FormControl mt={4}>
                                 <FormLabel>Loại BĐS</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'loai_BDS'} onChange={e=>onHandleChange(e)} value={formData.loai_BDS}>
                                     {listConst.loai_BDS.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -158,7 +177,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Sổ/ pháp lý</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'so_phap_ly'} onChange={e=>onHandleChange(e)} value={formData.so_phap_ly}>
                                     {listConst.so_phap_ly.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -168,7 +187,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Loại đường</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'loai_duong'} onChange={e=>onHandleChange(e)} value={formData.loai_duong}>
                                     {listConst.loai_duong.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -178,7 +197,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Điểm mạnh</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'diem_manh'} onChange={e=>onHandleChange(e)} value={formData.diem_manh}>
                                     {listConst.diem_manh.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -187,7 +206,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Điểm yếu</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'diem_yeu'} onChange={e=>onHandleChange(e)} value={formData.diem_yeu}>
                                     {listConst.diem_yeu.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -196,7 +215,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Đường rộng</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'duong_rong'} onChange={e=>onHandleChange(e)} value={formData.duong_rong}>
                                     {listConst.duong_rong.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -205,7 +224,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Ra đường lớn hơn</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'ra_duong_lon_hon'} onChange={e=>onHandleChange(e)} value={formData.ra_duong_lon_hon}>
                                     {listConst.ra_duong_lon_hon.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -214,7 +233,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Gần địa điểm đẹp</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'gan_dia_diem_dep'} onChange={e=>onHandleChange(e)} value={formData.gan_dia_diem_dep}>
                                     {listConst.gan_dia_diem_dep.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -224,16 +243,19 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Loại Hẻm/ Nhánh Hẻm</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'loai_hem'} onChange={e=>onHandleChange(e)} value={formData.loai_hem}>
                                     {listConst.loai_hem.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
                                     ))}
                                 </Select>
                             </FormControl>
+                        </div>
+
+                        <div className={`grid grid-cols-2 gap-x-3 text-sm ${(formStep === 0) && 'hidden'}`}>
                             <FormControl mt={4}>
                                 <FormLabel>Hàng xóm đẹp</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'hang_xom_dep'} onChange={e=>onHandleChange(e)} value={formData.hang_xom_dep}>
                                     {listConst.hang_xom_dep.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -253,7 +275,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Độ đẹp nhà</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'do_dep_nha'} onChange={e=>onHandleChange(e)} value={formData.do_dep_nha}>
                                     {listConst.do_dep_nha.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -263,7 +285,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Độ rộng mặt trước nhà/đất</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'do_rong_mat_truoc'} onChange={e=>onHandleChange(e)} value={formData.do_rong_mat_truoc}>
                                     {listConst.do_rong_mat_truoc.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -273,7 +295,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Hoàn công trong số</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'hoan_cong_trong_so'} onChange={e=>onHandleChange(e)} value={formData.hoan_cong_trong_so}>
                                     {listConst.hoan_cong_trong_so.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -283,7 +305,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Được xây dựng</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'duoc_xay_dung'} onChange={e=>onHandleChange(e)} value={formData.duoc_xay_dung}>
                                     {listConst.duoc_xay_dung.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -293,7 +315,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Tiềm năng</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'tiem_nang'} onChange={e=>onHandleChange(e)} value={formData.tiem_nang}>
                                     {listConst.tiem_nang.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -303,7 +325,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
                             <FormControl mt={4}>
                                 <FormLabel>Cung cầu</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'cung_cau'} onChange={e=>onHandleChange(e)} value={formData.cung_cau}>
                                     {listConst.cung_cau.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -312,7 +334,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Làm được</FormLabel>
-                                <Select isRequired={true} placeholder=""
+                                <Select isRequired={true} placeholder="Lựa chọn"
                                         name={'lam_duoc'} onChange={e=>onHandleChange(e)} value={formData.lam_duoc}>
                                     {listConst.lam_duoc.map(item => (
                                         <option key={item.name} value={item.tang_giam_gia}>{item.name}</option>
@@ -322,23 +344,42 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                         </div>
 
                         <div className="flex justify-between items-center">
-                            <Button
-                                className={'mt-5'} variant="outline" colorScheme="blue"
-                                type="submit">
-                                Tính giá
-                            </Button>
+                            {formStep === 0 ? (
+                                <>
+                                    <Button
+                                        onClick={()=>setFormStep(1)}
+                                        className={'mt-5'} variant="outline" colorScheme="blue">
+                                        Tiếp
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <div>
+                                        <Button
+                                            onClick={()=>setFormStep(0)}
+                                            className={'mt-5 mr-3'} variant="outline" colorScheme="blue">
+                                            Quay lại
+                                        </Button>
+                                        <Button
+                                            className={'mt-5'} colorScheme="blue"
+                                            type="submit">
+                                            Tính giá
+                                        </Button>
+                                    </div>
 
-                            <p className={'mt-3 text-sm lg:text-right'}><a className={'text-indigo-600 font-semibold'} href="">Nhận file tư vấn giá BĐS</a></p>
+                                    <p className={'mt-3 text-sm lg:text-right'}><a className={'text-indigo-600 font-semibold'} href="">Nhận file tư vấn giá BĐS</a></p>
+                                </>
+                            )}
                         </div>
 
 
-                        {result.giaCongTrinh > 0 && (
+                        {result > 0 && (
                         <div className={''}>
                             <hr className={'mt-4'}/>
                                 <div>
                                     <FormControl mt={4}>
                                         <FormLabel>Giá trị Bất động sản được tư vấn chuyên sâu là:</FormLabel>
-                                        <h4 className={'text-lg font-semibold'}>{getNumberWithCommas(result.giaCongTrinh)} đ</h4>
+                                        <h4 className={'text-lg font-semibold'}>{getNumberWithCommas(result)} đ</h4>
                                     </FormControl>
                                 </div>
 
