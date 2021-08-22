@@ -25,7 +25,7 @@ const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRela
     });
 
     const [formData, setFormData] = React.useState({
-        totalArea: 0,
+        dientichSan: 0,
         constType: 0,
         yearInUse: 0,
     });
@@ -43,8 +43,8 @@ const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRela
         yearInUse = yearInUse/100
 
         setResult({
-            giaCongTrinh: formData.totalArea * formData.constType * yearInUse,
-            giaSoBo: formData.totalArea * averagePrice
+            giaCongTrinh: formData.dientichSan * formData.constType * yearInUse,
+            giaSoBo: formData.dientichSan * averagePrice
         })
     }
     return (
@@ -62,7 +62,7 @@ const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRela
                             <FormControl mt={4}>
                                 <FormLabel>Diện tích sàn</FormLabel>
                                 <Input isRequired={true} type={'number'} placeholder="Tổng diện tích sử dụng (m2)"
-                                       name={'totalArea'} onChange={e=>onHandleChange(e)} value={formData.totalArea} />
+                                       name={'dientichSan'} onChange={e=>onHandleChange(e)} value={formData.dientichSan} />
                             </FormControl>
 
                             <FormControl className={''} mt={4}>
@@ -85,7 +85,7 @@ const PopupCalculateConstruction = ({subtitle, averagePrice, openModal, openRela
 
 
                         <Button
-                            className={'mt-5'} variant="outline" size="sm" colorScheme="blue"
+                            className={'mt-5'} variant="outline"  colorScheme="blue"
                             type="submit">
                             Tính giá
                         </Button>
