@@ -12,7 +12,7 @@ import React, {useEffect} from "react";
 import _ from 'lodash';
 import { getNumberWithCommas } from "../../utils/Utils";
 import AlertBaoGia from "./AlertBaoGia";
-import {any} from "prop-types";
+import {any, number} from "prop-types";
 
 const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
     const [formStep, setFormStep] = React.useState(0)
@@ -84,7 +84,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
         dientichSan: any,
         constType: any,
         yearInUse: any,
-        dientichDat: any,
+        dientichDat: number,
         loai_BDS: any,
         so_phap_ly: any,
         loai_duong: any,
@@ -95,7 +95,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
         gan_dia_diem_dep: any,
         loai_hem: any,
         hang_xom_dep: any,
-        co_via_he: any,
+        co_via_he: number,
         do_dep_nha: any,
         do_rong_mat_truoc: any,
         hoan_cong_trong_so: any,
@@ -154,16 +154,19 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
 
         setResult(result)
 
-        let tonggiaQSD: number = averagePrice*(100 + tangGiamPercent)/100*formData.dientichDat
+        // @ts-ignore
+        let tonggiaQSD: number = averagePrice*(100 + tangGiamPercent)*formData.dientichDat/100
+        // @ts-ignore
         let giaCongTrinh: number = formData.dientichSan * formData.constType * yearInUse
+        // @ts-ignore
         setBaogia({
             giaDat: averagePrice,
             tileDC: (100 + tangGiamPercent),
             giadatTL: (averagePrice*(100 + tangGiamPercent)/100),
-            dientichDat: formData.dientichDat,
+            dientichDat: +formData.dientichDat,
             tonggiaQSD: tonggiaQSD,
-            tongSanXD: formData.dientichSan,
-            dongiaXD: formData.constType,
+            tongSanXD: +formData.dientichSan,
+            dongiaXD: +formData.constType,
             chatluongConLai: (yearInUse * 100),
             giaCongTrinh: giaCongTrinh,
             tongGiaBDS: tonggiaQSD + giaCongTrinh,
@@ -324,7 +327,9 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
                             </FormControl>
                             <FormControl mt={4}>
                                 <FormLabel>Có vỉa hè</FormLabel>
-                                <RadioGroup isRequired={true} onChange={e=>setFormData({...formData, co_via_he: parseInt(e)})} value={`${formData.co_via_he}`}>
+                                <RadioGroup isRequired={true}
+                                            onChange={e=>setFormData({...formData, co_via_he: parseInt(e)})}
+                                            value={`${formData.co_via_he}`}>
                                     <Stack direction="row">
                                         {listConst.co_via_he.map(item => (
                                             <Radio key={item.name} value={`${item.tang_giam_gia}`}>{item.name}</Radio>
