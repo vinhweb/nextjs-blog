@@ -95,7 +95,7 @@ const PopupCalculateAdvance = ({subtitle, averagePrice, openModal}) => {
         gan_dia_diem_dep: any,
         loai_hem: any,
         hang_xom_dep: any,
-        co_via_he: number,
+        co_via_he: 0,
         do_dep_nha: any,
         do_rong_mat_truoc: any,
         hoan_cong_trong_so: any,
